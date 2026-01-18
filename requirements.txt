@@ -1,0 +1,17 @@
+# Core dependencies
+requests>=2.28.0
+python-dotenv>=1.0.0
+
+# vLLM for model serving
+vllm>=0.4.0
+
+# HuggingFace Hub for model downloading
+huggingface_hub>=0.20.0
+
+# EvalScope for benchmarking
+# Install from: https://github.com/modelscope/evalscope
+# pip install evalscope
+
+# Optional: for better progress display
+tqdm>=4.65.0
+
