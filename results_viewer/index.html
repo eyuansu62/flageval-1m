@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Experiment Results Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f1115;
+        --panel: #171a21;
+        --panel-2: #1f2430;
+        --text: #e6e8ee;
+        --muted: #9aa4b2;
+        --accent: #7aa2f7;
+        --good: #9ece6a;
+        --warn: #e0af68;
+        --bad: #f7768e;
+        --border: #2a3140;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(135deg, #0d1017 0%, #151b26 50%, #1a1f2e 100%);
+      }
+
+      header h1 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #7aa2f7, #bb9af7, #f7768e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        padding: 0 32px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .tab {
+        padding: 12px 20px;
+        cursor: pointer;
+        color: var(--muted);
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .tab:hover {
+        color: var(--text);
+        background: rgba(122, 162, 247, 0.08);
+      }
+
+      .tab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      main {
+        padding: 24px 32px 48px 32px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .panel-title {
+        margin: 0 0 16px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+      }
+
+      .summary-card {
+        background: linear-gradient(135deg, var(--panel-2), #252b3a);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .summary-card strong {
+        display: block;
+        font-size: 28px;
+        margin-bottom: 4px;
+        font-weight: 700;
+      }
+
+      .summary-card.success strong { color: var(--good); }
+      .summary-card.failed strong { color: var(--bad); }
+      .summary-card.warning strong { color: var(--warn); }
+      .summary-card.info strong { color: var(--accent); }
+
+      .summary-card span {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+      }
+
+      .chart-container {
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+        position: relative;
+        height: 320px;
+      }
+
+      .chart-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: var(--text);
+      }
+
+      .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .filters label {
+        display: block;
+        font-size: 11px;
+        margin-bottom: 6px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #0f131b;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 13px;
+      }
+
+      input:focus, select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(122, 162, 247, 0.15);
+      }
+
+      .status-pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        border: 1px solid transparent;
+        display: inline-block;
+        font-weight: 600;
+      }
+
+      .status-success {
+        background: rgba(158, 206, 106, 0.15);
+        color: var(--good);
+        border-color: rgba(158, 206, 106, 0.4);
+      }
+
+      .status-skipped {
+        background: rgba(122, 162, 247, 0.12);
+        color: var(--accent);
+        border-color: rgba(122, 162, 247, 0.35);
+      }
+
+      .status-failed,
+      .status-test_error,
+      .status-vllm_crash {
+        background: rgba(247, 118, 142, 0.15);
+        color: var(--bad);
+        border-color: rgba(247, 118, 142, 0.35);
+      }
+
+      .status-unknown {
+        background: rgba(224, 175, 104, 0.15);
+        color: var(--warn);
+        border-color: rgba(224, 175, 104, 0.35);
+      }
+
+      .fix-easy_fix {
+        background: rgba(158, 206, 106, 0.15);
+        color: var(--good);
+        border-color: rgba(158, 206, 106, 0.4);
+      }
+
+      .fix-not_fixable {
+        background: rgba(247, 118, 142, 0.15);
+        color: var(--bad);
+        border-color: rgba(247, 118, 142, 0.35);
+      }
+
+      .fix-skip {
+        background: rgba(122, 162, 247, 0.12);
+        color: var(--accent);
+        border-color: rgba(122, 162, 247, 0.35);
+      }
+
+      .fix-needs_review {
+        background: rgba(224, 175, 104, 0.15);
+        color: var(--warn);
+        border-color: rgba(224, 175, 104, 0.35);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        background: var(--panel);
+        z-index: 2;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+      }
+
+      tbody tr {
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      tbody tr:hover {
+        background: rgba(122, 162, 247, 0.08);
+      }
+
+      .table-wrapper {
+        max-height: 520px;
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 16px;
+      }
+
+      .detail-grid pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: #0d1117;
+        padding: 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        max-height: 320px;
+        overflow: auto;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .banner {
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 13px;
+        color: var(--muted);
+        background: rgba(122, 162, 247, 0.08);
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        background: #10141c;
+        display: inline-block;
+      }
+
+      .action-list {
+        display: grid;
+        gap: 8px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .action-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 12px;
+      }
+
+      .action-item .model-name {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .action-count {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      @media (max-width: 900px) {
+        .detail-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>⚡ Experiment Results Dashboard</h1>
+      <p>Real-time analysis of model evaluation runs • <span id="header-time"></span></p>
+    </header>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">📊 Overview</div>
+      <div class="tab" data-tab="failures">🔍 Failure Analysis</div>
+      <div class="tab" data-tab="results">📋 All Results</div>
+      <div class="tab" data-tab="actions">⚡ Actions</div>
+    </div>
+
+    <!-- Overview Tab -->
+    <div class="tab-content active" id="tab-overview">
+    <main>
+      <section class="panel" id="load-panel">
+        <div class="banner" id="load-status">
+            Loading data…
+        </div>
+          <div style="margin-top: 12px">
+            <label class="hint">Or load a local file:</label>
+            <input type="file" id="file-input" accept=".json" style="margin-top: 6px" />
+        </div>
+      </section>
+
+      <section class="panel">
+          <h3 class="panel-title">Experiment Summary</h3>
+        <div class="summary" id="summary-cards"></div>
+      </section>
+
+        <section class="panel">
+          <h3 class="panel-title">Status Distribution</h3>
+          <div class="charts-grid">
+            <div class="chart-container">
+              <div class="chart-title">By Status</div>
+              <canvas id="status-chart"></canvas>
+            </div>
+            <div class="chart-container">
+              <div class="chart-title">Success vs Failures</div>
+              <canvas id="success-chart"></canvas>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Failure Analysis Tab -->
+    <div class="tab-content" id="tab-failures">
+      <main>
+        <section class="panel">
+          <h3 class="panel-title">Failure Categories</h3>
+          <div class="charts-grid">
+            <div class="chart-container">
+              <div class="chart-title">By Category</div>
+              <canvas id="category-chart"></canvas>
+            </div>
+            <div class="chart-container">
+              <div class="chart-title">By Fixability</div>
+              <canvas id="fixability-chart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3 class="panel-title">Category Breakdown</h3>
+          <div class="table-wrapper" style="max-height: 400px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="category-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3 class="panel-title">Failed Models</h3>
+          <div class="filters" style="margin-bottom: 16px">
+            <div>
+              <label for="failure-search">Search</label>
+              <input id="failure-search" type="text" placeholder="Search model name..." />
+            </div>
+            <div>
+              <label for="category-filter">Category</label>
+              <select id="category-filter">
+                <option value="all">All categories</option>
+              </select>
+            </div>
+            <div>
+              <label for="fixability-filter">Fixability</label>
+              <select id="fixability-filter">
+                <option value="all">All</option>
+                <option value="easy_fix">Easy Fix</option>
+                <option value="not_fixable">Not Fixable</option>
+                <option value="skip">Skip</option>
+                <option value="needs_review">Needs Review</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Category</th>
+                  <th>Fixability</th>
+                  <th>Root Cause</th>
+                  <th>Suggested Fix</th>
+                </tr>
+              </thead>
+              <tbody id="failures-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- All Results Tab -->
+    <div class="tab-content" id="tab-results">
+      <main>
+      <section class="panel">
+        <div class="filters">
+          <div>
+            <label for="search-input">Search model / error text</label>
+            <input id="search-input" type="text" placeholder="e.g. internlm2, 404, skipped" />
+          </div>
+          <div>
+            <label for="status-filter">Status</label>
+            <select id="status-filter"></select>
+          </div>
+          <div>
+            <label for="min-score">Min avg score</label>
+            <input id="min-score" type="number" step="0.001" min="0" max="1" placeholder="0.0" />
+          </div>
+          <div>
+            <label for="sort-by">Sort by</label>
+            <select id="sort-by">
+              <option value="duration_desc">Duration (desc)</option>
+              <option value="duration_asc">Duration (asc)</option>
+              <option value="score_desc">Avg score (desc)</option>
+              <option value="score_asc">Avg score (asc)</option>
+              <option value="size_desc">Size (desc)</option>
+              <option value="size_asc">Size (asc)</option>
+              <option value="model_asc">Model (A→Z)</option>
+              <option value="model_desc">Model (Z→A)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Status</th>
+                <th>Avg score</th>
+                  <th>Duration</th>
+                <th>Size</th>
+                <th>TP</th>
+                  <th>GPU mem</th>
+                  <th>Error</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="detail-grid">
+          <div>
+              <h3 class="panel-title">Selected Model</h3>
+              <div id="detail-summary" class="hint">Click a row to view details.</div>
+          </div>
+          <div>
+              <h3 class="panel-title">Raw JSON</h3>
+            <pre id="detail-json">{}</pre>
+          </div>
+        </div>
+      </section>
+    </main>
+    </div>
+
+    <!-- Actions Tab -->
+    <div class="tab-content" id="tab-actions">
+      <main>
+        <section class="panel">
+          <h3 class="panel-title">Actionable Recommendations</h3>
+          <div class="summary" style="margin-bottom: 20px">
+            <div class="summary-card info">
+              <strong id="retry-count">0</strong>
+              <span>Retry (Transient)</span>
+            </div>
+            <div class="summary-card success">
+              <strong id="tp-count">0</strong>
+              <span>Increase TP</span>
+            </div>
+            <div class="summary-card warning">
+              <strong id="skip-count">0</strong>
+              <span>Add to Skip</span>
+            </div>
+            <div class="summary-card failed">
+              <strong id="notfix-count">0</strong>
+              <span>Not Fixable</span>
+            </div>
+          </div>
+        </section>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 32px 32px">
+          <section class="panel">
+            <h3 class="panel-title">🔄 Retry These (Transient Errors)</h3>
+            <p class="hint" style="margin-bottom: 12px">These models had API errors and may work on retry.</p>
+            <div class="action-list" id="retry-list"></div>
+          </section>
+
+          <section class="panel">
+            <h3 class="panel-title">📈 Increase Tensor Parallelism</h3>
+            <p class="hint" style="margin-bottom: 12px">These models need more GPUs (OOM errors).</p>
+            <div class="action-list" id="tp-list"></div>
+          </section>
+
+          <section class="panel">
+            <h3 class="panel-title">⏭️ Add to Skip List</h3>
+            <p class="hint" style="margin-bottom: 12px">Incomplete downloads or corrupted files.</p>
+            <div class="action-list" id="skip-list"></div>
+          </section>
+
+          <section class="panel">
+            <h3 class="panel-title">❌ Not Fixable</h3>
+            <p class="hint" style="margin-bottom: 12px">LoRA adapters, unsupported quantization, etc.</p>
+            <div class="action-list" id="notfix-list"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Update header time
+      document.getElementById('header-time').textContent = new Date().toLocaleString();
+
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+      });
+
+      const state = {
+        raw: null,
+        summary: null,
+        rows: [],
+        filtered: [],
+        failures: [],
+        filteredFailures: [],
+      };
+
+      const CATEGORY_DESCRIPTIONS = {
+        'api_error': 'vLLM API returned 404 or connection error',
+        'unknown': 'Could not determine root cause',
+        'eval_error': 'Evaluation framework error',
+        'oom_needs_more_tp': 'Out of memory - needs more tensor parallelism',
+        'oom_needs_more_gpu_mem': 'Out of memory - needs more GPU memory',
+        'unsupported_quantization': 'Quantization format not supported by vLLM',
+        'multimodal_not_supported': 'Multimodal model - not supported for text eval',
+        'missing_weights': 'Model weight files not found',
+        'lora_adapter': 'LoRA adapter - requires base model',
+        'cuda_error': 'CUDA runtime error',
+        'context_length_too_long': 'Input exceeds max context length',
+      };
+
+      const statusColors = (status) => {
+        if (status === "success") return "status-success";
+        if (status === "skipped") return "status-skipped";
+        if (status === "vllm_crash" || status === "test_error") return "status-failed";
+        return "status-unknown";
+      };
+
+      const formatBytes = (bytes) => {
+        if (bytes === null || bytes === undefined) return "–";
+        const units = ["B", "KB", "MB", "GB", "TB"];
+        let value = Number(bytes);
+        let unitIndex = 0;
+        while (value >= 1024 && unitIndex < units.length - 1) {
+          value /= 1024;
+          unitIndex += 1;
+        }
+        return `${value.toFixed(value >= 100 ? 0 : 1)} ${units[unitIndex]}`;
+      };
+
+      const formatNumber = (value, digits = 2) => {
+        if (value === null || value === undefined || Number.isNaN(value)) return "–";
+        return Number(value).toFixed(digits);
+      };
+
+      // Charts
+      let statusChart, successChart, categoryChart, fixabilityChart;
+
+      const chartColors = {
+        success: '#9ece6a',
+        skipped: '#7aa2f7',
+        test_error: '#f7768e',
+        vllm_crash: '#ff9e64',
+        failed: '#f7768e',
+        unknown: '#e0af68',
+        easy_fix: '#9ece6a',
+        not_fixable: '#f7768e',
+        skip: '#7aa2f7',
+        needs_review: '#e0af68',
+      };
+
+      const createChart = (ctx, type, labels, data, colors) => {
+        return new Chart(ctx, {
+          type: type,
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: colors,
+              borderColor: '#171a21',
+              borderWidth: 2,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  color: '#9aa4b2',
+                  font: { size: 11, family: 'JetBrains Mono' },
+                  padding: 10,
+                }
+              }
+            }
+          }
+        });
+      };
+
+      const updateCharts = () => {
+        if (!state.summary) return;
+
+        const statusCounts = state.summary.status_counts || {};
+        const categories = state.summary.failure_analysis?.by_category || {};
+        const fixabilities = state.summary.failure_analysis?.by_fixability || {};
+
+        // Status chart
+        const statusLabels = Object.keys(statusCounts);
+        const statusData = Object.values(statusCounts);
+        const statusChartColors = statusLabels.map(s => chartColors[s] || '#666');
+
+        if (statusChart) statusChart.destroy();
+        statusChart = createChart(
+          document.getElementById('status-chart'),
+          'doughnut',
+          statusLabels,
+          statusData,
+          statusChartColors
+        );
+
+        // Success vs failure
+        const successCount = statusCounts.success || 0;
+        const failedCount = (statusCounts.test_error || 0) + (statusCounts.vllm_crash || 0);
+        const skippedCount = statusCounts.skipped || 0;
+
+        if (successChart) successChart.destroy();
+        successChart = createChart(
+          document.getElementById('success-chart'),
+          'doughnut',
+          ['Success', 'Failed', 'Skipped'],
+          [successCount, failedCount, skippedCount],
+          [chartColors.success, chartColors.failed, chartColors.skipped]
+        );
+
+        // Category chart
+        const catLabels = Object.keys(categories);
+        const catData = Object.values(categories);
+        const catColors = catLabels.map((_, i) => 
+          `hsl(${(i * 360 / catLabels.length + 200) % 360}, 60%, 55%)`
+        );
+
+        if (categoryChart) categoryChart.destroy();
+        categoryChart = createChart(
+          document.getElementById('category-chart'),
+          'doughnut',
+          catLabels.map(c => c.replace(/_/g, ' ')),
+          catData,
+          catColors
+        );
+
+        // Fixability chart
+        const fixLabels = Object.keys(fixabilities);
+        const fixData = Object.values(fixabilities);
+        const fixColors = fixLabels.map(f => chartColors[f] || '#666');
+
+        if (fixabilityChart) fixabilityChart.destroy();
+        fixabilityChart = createChart(
+          document.getElementById('fixability-chart'),
+          'doughnut',
+          fixLabels.map(f => f.replace(/_/g, ' ')),
+          fixData,
+          fixColors
+        );
+
+        // Category table
+        const catTable = document.getElementById('category-table');
+        catTable.innerHTML = catLabels.map((cat, i) => `
+          <tr>
+            <td><span class="badge">${cat.replace(/_/g, ' ')}</span></td>
+            <td><strong>${catData[i]}</strong></td>
+            <td class="hint">${CATEGORY_DESCRIPTIONS[cat] || 'No description'}</td>
+          </tr>
+        `).join('');
+
+        // Populate category filter
+        const catFilter = document.getElementById('category-filter');
+        catFilter.innerHTML = '<option value="all">All categories</option>' +
+          catLabels.map(c => `<option value="${c}">${c.replace(/_/g, ' ')}</option>`).join('');
+      };
+
+      const updateSummaryCards = () => {
+        if (!state.summary) return;
+        const s = state.summary;
+        const statusCounts = s.status_counts || {};
+
+        const cards = [
+          { label: "Total Models", value: s.experiment?.total_models || 0, class: "info" },
+          { label: "Success", value: statusCounts.success || 0, class: "success" },
+          { label: "Failed", value: (statusCounts.test_error || 0) + (statusCounts.vllm_crash || 0), class: "failed" },
+          { label: "Skipped", value: statusCounts.skipped || 0, class: "info" },
+          { label: "Failures Analyzed", value: s.failure_analysis?.total_failures || 0, class: "warning" },
+          { label: "Datasets", value: (s.experiment?.datasets || []).length, class: "info" },
+        ];
+
+        document.getElementById('summary-cards').innerHTML = cards
+          .map(c => `<div class="summary-card ${c.class}"><strong>${c.value}</strong><span>${c.label}</span></div>`)
+          .join('');
+      };
+
+      const updateActionLists = () => {
+        if (!state.summary) return;
+        const a = state.summary.actionable || {};
+
+        document.getElementById('retry-count').textContent = (a.retry || []).length;
+        document.getElementById('tp-count').textContent = (a.increase_tp || []).length;
+        document.getElementById('skip-count').textContent = (a.skip || []).length;
+        document.getElementById('notfix-count').textContent = (a.not_fixable || []).length;
+
+        const renderList = (items, containerId, limit = 50) => {
+          const container = document.getElementById(containerId);
+          if (!items || items.length === 0) {
+            container.innerHTML = '<div class="hint">No items</div>';
+            return;
+          }
+          container.innerHTML = items.slice(0, limit).map(m => `
+            <div class="action-item">
+              <span class="model-name">${m}</span>
+            </div>
+          `).join('') + (items.length > limit ? `<div class="hint">...and ${items.length - limit} more</div>` : '');
+        };
+
+        renderList(a.retry, 'retry-list');
+        renderList(a.increase_tp, 'tp-list');
+        renderList(a.skip, 'skip-list');
+        renderList(a.not_fixable, 'notfix-list');
+      };
+
+      const buildRows = (data) => {
+        const entries = Object.values(data.results || {});
+        return entries.map((entry) => {
+          const evalScores = entry.eval_scores || {};
+          const numericScores = Object.values(evalScores)
+            .map(p => p?.score)
+            .filter(v => typeof v === "number");
+          const avgScore = numericScores.length > 0
+              ? numericScores.reduce((a, b) => a + b, 0) / numericScores.length
+              : null;
+          return {
+            model_id: entry.model_id || entry.model_name || "unknown",
+            status: entry.status || "unknown",
+            tp_size: entry.tp_size ?? null,
+            size_bytes: entry.size_bytes ?? null,
+            duration_seconds: entry.duration_seconds ?? entry.timing?.total_seconds ?? null,
+            gpu_memory_gb: entry.gpu_memory_gb ?? null,
+            avg_score: avgScore,
+            error_short: (entry.test_error || entry.vllm_error || "").split("\n")[0].slice(0, 100),
+            raw: entry,
+          };
+        });
+      };
+
+      const buildFailures = (data) => {
+        const details = data.failure_details || {};
+        return Object.entries(details).map(([id, f]) => ({
+          model_id: id,
+          category: f.category || 'unknown',
+          fixability: f.fixability || 'needs_review',
+          root_cause: f.root_cause || '',
+          suggested_fix: f.suggested_fix || '',
+          raw: f,
+        }));
+      };
+
+      // Filter and render failures
+      const filterFailures = () => {
+        const search = document.getElementById('failure-search').value.toLowerCase();
+        const cat = document.getElementById('category-filter').value;
+        const fix = document.getElementById('fixability-filter').value;
+
+        state.filteredFailures = state.failures.filter(f => {
+          const matchSearch = !search || f.model_id.toLowerCase().includes(search);
+          const matchCat = cat === 'all' || f.category === cat;
+          const matchFix = fix === 'all' || f.fixability === fix;
+          return matchSearch && matchCat && matchFix;
+        });
+
+        renderFailures();
+      };
+
+      const renderFailures = () => {
+        document.getElementById('failures-body').innerHTML = state.filteredFailures.map(f => `
+          <tr>
+            <td>${f.model_id}</td>
+            <td><span class="badge">${f.category.replace(/_/g, ' ')}</span></td>
+            <td><span class="status-pill fix-${f.fixability}">${f.fixability.replace(/_/g, ' ')}</span></td>
+            <td class="hint">${f.root_cause.slice(0, 60)}${f.root_cause.length > 60 ? '...' : ''}</td>
+            <td class="hint">${(f.suggested_fix || '–').slice(0, 50)}</td>
+          </tr>
+        `).join('');
+      };
+
+      // Results table
+      const updateStatusFilter = () => {
+        const statuses = Array.from(new Set(state.rows.map(r => r.status))).sort();
+        document.getElementById('status-filter').innerHTML =
+          '<option value="all">All statuses</option>' +
+          statuses.map(s => `<option value="${s}">${s}</option>`).join('');
+      };
+
+      const applyFilters = () => {
+        const search = document.getElementById('search-input').value.toLowerCase();
+        const status = document.getElementById('status-filter').value;
+        const minScore = document.getElementById('min-score').value;
+
+        state.filtered = state.rows.filter(r => {
+          const matchStatus = status === 'all' || r.status === status;
+          const matchSearch = !search || r.model_id.toLowerCase().includes(search) || r.error_short.toLowerCase().includes(search);
+          const matchScore = !minScore || (r.avg_score !== null && r.avg_score >= Number(minScore));
+          return matchStatus && matchSearch && matchScore;
+        });
+
+        const [sortKey, dir] = document.getElementById('sort-by').value.split('_');
+        const mult = dir === 'desc' ? -1 : 1;
+        state.filtered.sort((a, b) => {
+          if (sortKey === 'duration') return mult * ((a.duration_seconds ?? -1) - (b.duration_seconds ?? -1));
+          if (sortKey === 'score') return mult * ((a.avg_score ?? -1) - (b.avg_score ?? -1));
+          if (sortKey === 'size') return mult * ((a.size_bytes ?? -1) - (b.size_bytes ?? -1));
+          if (sortKey === 'model') return mult * a.model_id.localeCompare(b.model_id);
+          return 0;
+        });
+
+        renderTable();
+      };
+
+      const renderTable = () => {
+        document.getElementById('results-body').innerHTML = state.filtered.map((r, i) => `
+          <tr data-index="${i}">
+            <td>${r.model_id}</td>
+            <td><span class="status-pill ${statusColors(r.status)}">${r.status}</span></td>
+            <td>${formatNumber(r.avg_score, 4)}</td>
+            <td>${formatNumber(r.duration_seconds, 1)}s</td>
+            <td>${formatBytes(r.size_bytes)}</td>
+            <td>${r.tp_size ?? '–'}</td>
+            <td>${formatNumber(r.gpu_memory_gb, 1)}</td>
+            <td class="hint">${r.error_short || '–'}</td>
+              </tr>
+        `).join('');
+      };
+
+      const renderDetails = (row) => {
+        if (!row) {
+          document.getElementById('detail-summary').textContent = 'Click a row to view details.';
+          document.getElementById('detail-json').textContent = '{}';
+          return;
+        }
+        document.getElementById('detail-summary').innerHTML = `
+          <div><strong>${row.model_id}</strong></div>
+          <div class="hint">Status: ${row.status} · Score: ${formatNumber(row.avg_score, 4)}</div>
+          <div class="hint">Duration: ${formatNumber(row.duration_seconds, 1)}s · TP: ${row.tp_size ?? '–'}</div>
+        `;
+        document.getElementById('detail-json').textContent = JSON.stringify(row.raw, null, 2);
+      };
+
+      // Load data
+      const loadData = async () => {
+        try {
+          // Load summary data
+          const summaryRes = await fetch('summary_data.json');
+          if (summaryRes.ok) {
+            state.summary = await summaryRes.json();
+            state.failures = buildFailures(state.summary);
+            state.filteredFailures = state.failures;
+            updateCharts();
+            updateActionLists();
+            renderFailures();
+          }
+
+          // Load results - try multiple paths for different GitHub Pages setups
+          const possiblePaths = [
+            '../experiment_results/results.json',  // If served from results_viewer/
+            'experiment_results/results.json',      // If served from root
+            './experiment_results/results.json',    // Alternative root path
+          ];
+          
+          let resultsRes = null;
+          for (const path of possiblePaths) {
+            try {
+              resultsRes = await fetch(path);
+              if (resultsRes.ok) break;
+            } catch (e) {
+              continue;
+            }
+          }
+          
+          if (resultsRes && resultsRes.ok) {
+            state.raw = await resultsRes.json();
+            state.rows = buildRows(state.raw);
+            state.filtered = state.rows;
+            updateSummaryCards();
+            updateStatusFilter();
+            applyFilters();
+            document.getElementById('load-status').textContent =
+              `Loaded ${state.rows.length} models · ${state.failures.length} failure analyses`;
+          }
+        } catch (e) {
+          document.getElementById('load-status').textContent = 'Failed to load data. Use file picker.';
+          console.error(e);
+        }
+      };
+
+      // Event listeners
+      document.getElementById('results-body').addEventListener('click', e => {
+        const tr = e.target.closest('tr');
+        if (tr) renderDetails(state.filtered[Number(tr.dataset.index)]);
+      });
+
+      ['search-input', 'status-filter', 'min-score', 'sort-by'].forEach(id => {
+        document.getElementById(id).addEventListener('input', applyFilters);
+        document.getElementById(id).addEventListener('change', applyFilters);
+      });
+
+      ['failure-search', 'category-filter', 'fixability-filter'].forEach(id => {
+        document.getElementById(id).addEventListener('input', filterFailures);
+        document.getElementById(id).addEventListener('change', filterFailures);
+      });
+
+      document.getElementById('file-input').addEventListener('change', async e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const data = JSON.parse(await file.text());
+        state.raw = data;
+        state.rows = buildRows(data);
+        updateStatusFilter();
+        applyFilters();
+      });
+
+      loadData();
+    </script>
+  </body>
+</html>
