@@ -42,14 +42,15 @@ from pathlib import Path
 from typing import Optional
 import requests
 
+from model_path_utils import model_id_to_dir, resolve_hf_model_path
+
 # ============================================================================
 # Configuration
 # ============================================================================
 
-DEFAULT_JSON = "found_models_full.json"
-DEFAULT_MODEL_DIR = os.environ.get("HF_HOME", os.path.expanduser("~/.cache/huggingface/hub"))
+DEFAULT_JSON = "/mnt/baai_cp_perf/qbw/evalscope-experiment-runner/top_nlp_models.json"
 DEFAULT_PORT = 8010
-DEFAULT_TIMEOUT_SERVER = 600  # 10 minutes to start server
+DEFAULT_TIMEOUT_SERVER = 6000  # 6000 seconds to start server
 DEFAULT_TIMEOUT_HEALTH = 10   # 10 seconds for health check
 MAX_GPUS = 8
 GB = 1073741824.0
@@ -58,7 +59,7 @@ RESULTS_DIR = Path("experiment_results")
 LOG_FILE = RESULTS_DIR / "experiment.log"
 RESULTS_FILE = RESULTS_DIR / "results.json"
 ERRORS_FILE = RESULTS_DIR / "errors.json"
-SKIP_MODELS_FILE = "models_incomplete_10.txt"
+SKIP_MODELS_FILE = "/mnt/baai_cp_perf/qbw/evalscope-experiment-runner/top_nlp_models_to_redownload.txt"
 
 # Thread-safe lock for state updates in parallel mode
 STATE_LOCK = threading.Lock()
@@ -185,56 +186,6 @@ def setup_logging(log_file: Path, verbose: bool = False):
 # Utility Functions
 # ============================================================================
 
-def model_id_to_dir(model_id: str) -> str:
-    """Convert model_id (org/model) to directory format (models--org--model)."""
-    return f"models--{model_id.replace('/', '--')}"
-
-
-def resolve_hf_model_path(base_path: Path) -> Path:
-    """
-    Resolve the actual model path from HuggingFace cache directory structure.
-    
-    HuggingFace cache structure:
-        models--org--model-name/
-        ├── blobs/
-        ├── refs/
-        │   └── main (contains the commit hash)
-        └── snapshots/
-            └── <commit_hash>/
-                ├── config.json
-                └── ...
-    
-    Returns the snapshot directory containing config.json, or base_path if not HF cache format.
-    """
-    snapshots_dir = base_path / "snapshots"
-    
-    # Check if this is HF cache format
-    if not snapshots_dir.exists():
-        # Not HF cache format, return as-is (might be direct model path)
-        return base_path
-    
-    # Try to read the commit hash from refs/main
-    refs_main = base_path / "refs" / "main"
-    if refs_main.exists():
-        commit_hash = refs_main.read_text().strip()
-        snapshot_path = snapshots_dir / commit_hash
-        if snapshot_path.exists() and (snapshot_path / "config.json").exists():
-            return snapshot_path
-    
-    # Fallback: find any snapshot directory with config.json
-    for snapshot in snapshots_dir.iterdir():
-        if snapshot.is_dir():
-            if (snapshot / "config.json").exists():
-                return snapshot
-            # Also check for Mistral format (params.json)
-            if (snapshot / "params.json").exists():
-                return snapshot
-    
-    # No valid snapshot found, return base path
-    logging.warning(f"No valid model snapshot found in {base_path}")
-    return base_path
-
-
 def load_models(json_file: str) -> list:
     """Load models from JSON file."""
     with open(json_file) as f:
@@ -280,6 +231,11 @@ def load_state() -> Optional[ExperimentState]:
             failed=data.get('failed', 0),
             skipped=data.get('skipped', 0),
         )
+        # Load metadata
+        state.vllm_version = data.get('vllm_version')
+        state.datasets_config = data.get('datasets_config')
+        state.python_version = data.get('python_version')
+        state.hostname = data.get('hostname')
         for model_id, result_data in data.get('results', {}).items():
             result = ModelResult(
                 model_id=result_data['model_id'],
@@ -479,6 +435,42 @@ def cleanup_gpu():
         pass
 
 
+def find_free_port(start_port: int = 8010, max_attempts: int = 100) -> int:
+    """
+    Find a free port on the current machine.
+    
+    Uses socket binding to guarantee the port is actually available.
+    """
+    import socket
+    
+    for offset in range(max_attempts):
+        port = start_port + offset
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(('', port))
+                return port
+        except OSError:
+            continue
+    
+    # Fallback: let OS assign a port
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
+
+
+def get_chat_template_file(model_path: str) -> Optional[str]:
+    """
+    Return a chat template file path if present in the model directory.
+    """
+    model_path = Path(model_path)
+    for template_name in ("chat_template.jinja", "chat_template.json"):
+        template_path = model_path / template_name
+        if template_path.exists():
+            return str(template_path)
+    return None
+
+
 # ============================================================================
 # Main Experiment Logic
 # ============================================================================
@@ -502,6 +494,12 @@ def run_vllm_server(model_path: str, model_id: str, tp_size: int, port: int, ext
         "--host", "0.0.0.0",
         "--trust-remote-code",
     ]
+    
+    # Pass chat template file to vLLM if present (unless user already set it)
+    if "--chat-template" not in extra_args.split():
+        chat_template_file = get_chat_template_file(model_path)
+        if chat_template_file:
+            cmd.extend(["--chat-template", chat_template_file])
     
     if extra_args:
         cmd.extend(extra_args.split())
@@ -546,43 +544,14 @@ try:
 except:
     ENV = os.environ  # Fallback to environment variables
 
-# DATASETS = [
-#     'iquiz', 'ifeval', 'mmlu', 'mmlu_pro', 'musr', 'process_bench', 'race',
-#     'cmmlu', 'humaneval', 'gsm8k', 'bbh', 'competition_math', 'math_500',
-#     'aime24', 'gpqa_diamond', 'arc', 'ceval', 'hellaswag', 'general_mcq',
-#     'general_qa', 'super_gpqa', 'mmlu_redux', 'simple_qa', 'chinese_simpleqa',
-#     'alpaca_eval', 'arena_hard', 'maritime_bench', 'drop', 'winogrande',
-#     'tool_bench', 'frames', 'docmath', 'needle_haystack', 'bfcl_v3', 'hle', 'tau_bench',
-# ]
 
-DATASETS = ["mmlu"]
+DATASETS = ["mmlu", "mmlu_pro", "math_500", "gsm8k", "gpqa_diamond"]
 DATASET_ARGS = {
-    'mmlu': {'subset_list': ['elementary_mathematics', 'high_school_european_history', 'nutrition'], 'few_shot_num': 0},
-    'mmlu_pro': {'subset_list': ['math', 'health'], 'few_shot_num': 4},
-    'ceval': {'subset_list': ['computer_network', 'operating_system', 'computer_architecture'], 'few_shot_num': 0},
-    'cmmlu': {'subset_list': ['elementary_chinese'], 'few_shot_num': 0},
-    'bbh': {'subset_list': ['word_sorting', 'movie_recommendation']},
+    'mmlu': {'few_shot_num': 0},
+    'mmlu_pro': {'few_shot_num': 0},
+    'math_500': {'few_shot_num': 0},
+    'gsm8k': {'few_shot_num': 0},
     'gpqa_diamond': {'few_shot_num': 0},
-    'competition_math': {'subset_list': ['Level 1']},
-    'math_500': {'subset_list': ['Level 1']},
-    'process_bench': {'subset_list': ['gsm8k']},
-    'musr': {'subset_list': ['murder_mysteries']},
-    'super_gpqa': {'subset_list': ['Philosophy', 'Education'], 'few_shot_num': 0},
-    'chinese_simpleqa': {'subset_list': ['中华文化']},
-    'mmlu_redux': {'subset_list': ['abstract_algebra']},
-    'docmath': {'subset_list': ['simpshort_testmini']},
-    'bfcl_v3': {'subset_list': ['simple', 'multiple']},
-    'hle': {'subset_list': ['Math', 'Other']},
-    'general_mcq': {'local_path': 'custom_eval/text/mcq', 'subset_list': ['example']},
-    'general_qa': {'local_path': 'custom_eval/text/qa', 'subset_list': ['example']},
-    'tau_bench': {
-        'extra_params': {
-            'user_model': 'qwen-plus',
-            'api_key': ENV.get('DASHSCOPE_API_KEY'),
-            'api_base': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
-        },
-        'subset_list': ['airline'],
-    },
 }
 
 
@@ -713,13 +682,19 @@ def get_model_max_tokens(model_path: str, default: int = 2048, max_cap: int = 40
 
 def is_chat_model(model_path: str) -> bool:
     """
-    Determine if a model is a chat model by checking for chat_template in tokenizer_config.json.
+    Determine if a model is a chat model.
+    
+    Heuristics:
+    - Prefer explicit `chat_template` field in `tokenizer_config.json`
+    - Fallback: presence of a `chat_template.jinja` or `chat_template.json` file in the model directory
     
     Returns:
-        True if the model has a chat_template (chat model), False otherwise (base model).
+        True if the model looks like a chat model, False otherwise (base model).
     """
-    tokenizer_config_path = Path(model_path) / "tokenizer_config.json"
+    model_path = Path(model_path)
+    tokenizer_config_path = model_path / "tokenizer_config.json"
     
+    # 1) Check tokenizer_config.json for chat_template
     if tokenizer_config_path.exists():
         try:
             with open(tokenizer_config_path, 'r') as f:
@@ -729,16 +704,53 @@ def is_chat_model(model_path: str) -> bool:
             if 'chat_template' in tokenizer_config:
                 chat_template = tokenizer_config['chat_template']
                 if chat_template and (isinstance(chat_template, str) or isinstance(chat_template, list)):
-                    logging.debug(f"Found chat_template in tokenizer_config.json - this is a chat model")
+                    logging.debug("Found chat_template in tokenizer_config.json - this is a chat model")
                     return True
             
-            logging.debug(f"No chat_template found in tokenizer_config.json - this is a base model")
+            logging.debug("No chat_template field in tokenizer_config.json")
         except (json.JSONDecodeError, IOError) as e:
-            logging.warning(f"Failed to read tokenizer_config.json: {e}, assuming base model")
+            logging.warning(f"Failed to read tokenizer_config.json: {e}, will try other heuristics")
     else:
-        logging.debug(f"No tokenizer_config.json found at {tokenizer_config_path}, assuming base model")
+        logging.debug(f"No tokenizer_config.json found at {tokenizer_config_path}, will try other heuristics")
     
+    # 2) Heuristic: check for chat_template.* files in model directory
+    for template_name in ("chat_template.jinja", "chat_template.json"):
+        chat_template_file = model_path / template_name
+        if chat_template_file.exists():
+            logging.debug(f"Found {template_name} in model directory - treating as chat model")
+            return True
+    
+    # If none of the above matched, treat as base model
+    logging.debug(f"No chat-specific template found in {model_path}, treating as base model")
     return False
+
+
+def validate_safetensors_headers(model_path: Path, max_files: int = 5) -> tuple:
+    """
+    Quickly validate safetensors headers to catch obvious corruption before launch.
+    
+    Returns:
+        (ok: bool, error_msg: Optional[str])
+    """
+    try:
+        from safetensors import safe_open  # type: ignore
+    except Exception as e:
+        # If safetensors is not available, skip the integrity check silently.
+        logging.debug(f"safetensors not available for header check: {e}")
+        return True, None
+    
+    st_files = sorted(model_path.rglob("*.safetensors"))
+    if not st_files:
+        return True, None
+    
+    for st_file in st_files[:max_files]:
+        try:
+            with safe_open(st_file, framework="pt") as _:
+                pass
+        except Exception as e:
+            return False, f"Corrupted safetensors file: {st_file} ({type(e).__name__}: {e})"
+    
+    return True, None
 
 
 def run_quick_test(model_id: str, model_path: str, port: int, num_samples: int = 5) -> tuple:
@@ -834,6 +846,13 @@ def run_test(model_id: str, model_path: str, port: int) -> tuple:
             logging.info(f"Model {model_id} detected as BASE model, using completions endpoint")
         
         # Create task config
+        # Use simple directory structure: outputs/ModelName
+        # This is easier to browse and ensures uniqueness per model
+        safe_model_name = model_id.replace("/", "_")
+        output_dir = Path("outputs") / safe_model_name
+        
+        logging.info(f"Task output directory: {output_dir}")
+        
         task_cfg = TaskConfig(
             model=model_path,
             model_id=model_id.replace("/", "_"),
@@ -844,6 +863,9 @@ def run_test(model_id: str, model_path: str, port: int) -> tuple:
             dataset_args=DATASET_ARGS,
             eval_batch_size=16,
             stream=False,
+            limit=100,
+            work_dir=str(output_dir),
+            no_timestamp=True,  # We handle timestamp in the directory name
             generation_config={
                 'temperature': 0,
                 'n': 1,
@@ -854,12 +876,11 @@ def run_test(model_id: str, model_path: str, port: int) -> tuple:
         # Run the task
         run_task(task_cfg=task_cfg)
         
-        # Find output directory and parse results
-        output_dir = find_latest_output_dir()
-        if output_dir:
-            eval_scores = parse_eval_results(output_dir, model_id)
+        # Parse results from the specific output directory
+        if output_dir.exists():
+            eval_scores = parse_eval_results(str(output_dir), model_id)
         
-        return 0, "TEST_COMPLETED_SUCCESSFULLY", "", eval_scores, output_dir
+        return 0, "TEST_COMPLETED_SUCCESSFULLY", "", eval_scores, str(output_dir)
         
     except Exception as e:
         error_msg = str(e)
@@ -869,7 +890,6 @@ def run_test(model_id: str, model_path: str, port: int) -> tuple:
 
 def test_single_model(
     model: dict,
-    model_dir: str,
     port: int,
     extra_args: str,
     dry_run: bool,
@@ -896,7 +916,8 @@ def test_single_model(
         start_time=datetime.now().isoformat()
     )
     
-    size_gb = size_bytes / GB
+    # Handle None size_bytes gracefully
+    size_gb = (size_bytes / GB) if size_bytes else 0.0
     logging.info("=" * 70)
     logging.info(f"[{idx}/{total}] Testing: {model_id}")
     logging.info(f"Size: {size_gb:.2f} GB | TP: {tp_size} | Port: {port}")
@@ -915,21 +936,42 @@ def test_single_model(
         result.end_time = datetime.now().isoformat()
         return result
     
-    # Build model path
-    dir_name = model_id_to_dir(model_id)
-    base_model_path = Path(model_dir) / dir_name
+    # Try to use model_path from JSON if available
+    model_path = None
+    if 'model_path' in model and model['model_path']:
+        try:
+            json_model_path = Path(model['model_path'])
+            if json_model_path.exists() and (
+                (json_model_path / "config.json").exists() or 
+                (json_model_path / "params.json").exists()
+            ):
+                model_path = json_model_path
+                logging.info(f"Using model_path from JSON: {model_path}")
+            else:
+                logging.warning(f"model_path in JSON exists but is invalid: {json_model_path}, will try fallback")
+        except (TypeError, ValueError) as e:
+            logging.warning(f"Invalid model_path in JSON: {e}, will try fallback")
     
-    if not base_model_path.exists():
-        logging.error(f"Model directory not found: {base_model_path}")
-        result.status = Status.SKIPPED
-        result.vllm_error = f"Model directory not found: {base_model_path}"
-        result.end_time = datetime.now().isoformat()
-        save_error(model_id, "MODEL_NOT_FOUND", str(result.vllm_error))
-        return result
+    # Fallback to resolving path from model_dir if not in JSON or JSON path invalid
+    if model_path is None:
+        # Ensure model_dir is valid
+        base_model_path = Path(model['model_path'])
+        
+        if not base_model_path.exists():
+            logging.error(f"Model directory not found: {base_model_path}")
+            result.status = Status.SKIPPED
+            result.vllm_error = f"Model directory not found: {base_model_path}"
+            result.end_time = datetime.now().isoformat()
+            save_error(model_id, "MODEL_NOT_FOUND", str(result.vllm_error))
+            return result
+        
+        # Resolve HuggingFace cache path to actual model directory
+        model_path = resolve_hf_model_path(base_model_path)
+        logging.info(f"Resolved model path: {model_path}")
     
-    # Resolve HuggingFace cache path to actual model directory
-    model_path = resolve_hf_model_path(base_model_path)
-    logging.info(f"Resolved model path: {model_path}")
+    # Verify model path is valid (should always be Path object at this point)
+    if not isinstance(model_path, Path):
+        model_path = Path(model_path)
     
     if not (model_path / "config.json").exists() and not (model_path / "params.json").exists():
         logging.error(f"No config.json or params.json found in: {model_path}")
@@ -939,8 +981,20 @@ def test_single_model(
         save_error(model_id, "MODEL_CONFIG_NOT_FOUND", str(result.vllm_error))
         return result
     
+    # Quick safetensors header check to avoid wasting a GPU on obviously bad weights
+    ok_st, st_err = validate_safetensors_headers(model_path, max_files=5)
+    if not ok_st:
+        logging.error(st_err)
+        result.status = Status.SKIPPED
+        result.vllm_error = st_err
+        result.end_time = datetime.now().isoformat()
+        save_error(model_id, "WEIGHTS_CORRUPT", st_err)
+        return result
+    
     # Skip base models (non-chat models) - we only support chat models for now
-    if not is_chat_model(str(model_path)):
+    # Ensure model_path is Path object for is_chat_model
+    model_path_str = str(model_path) if isinstance(model_path, Path) else model_path
+    if not is_chat_model(model_path_str):
         logging.warning(f"Skipping base model (no chat_template): {model_id}")
         result.status = Status.SKIPPED
         result.vllm_error = "Base model not supported (no chat_template in tokenizer_config.json)"
@@ -964,7 +1018,9 @@ def test_single_model(
         # Safe model name for log files
         safe_model_name = model_id.replace("/", "__").replace(" ", "_")
         
-        vllm_proc = run_vllm_server(str(model_path), model_id, tp_size, port, extra_args, gpu_ids=gpu_ids)
+        # Ensure model_path is string for vLLM server
+        model_path_str = str(model_path) if isinstance(model_path, Path) else model_path
+        vllm_proc = run_vllm_server(model_path_str, model_id, tp_size, port, extra_args, gpu_ids=gpu_ids)
         result.vllm_pid = vllm_proc.pid
         gpu_info = f" on GPU(s) {gpu_ids}" if gpu_ids else ""
         logging.info(f"vLLM started with PID: {vllm_proc.pid}{gpu_info}")
@@ -1025,7 +1081,8 @@ def test_single_model(
             peak_gpu_memory = gpu_before.get("total_memory_used_gb", 0)
             
             # Step 3a: Run quick sanity test first
-            quick_test_passed, quick_test_error = run_quick_test(model_id, str(model_path), port)
+            model_path_str = str(model_path) if isinstance(model_path, Path) else model_path
+            quick_test_passed, quick_test_error = run_quick_test(model_id, model_path_str, port)
             
             if not quick_test_passed:
                 result.status = Status.TEST_ERROR
@@ -1044,7 +1101,8 @@ def test_single_model(
             test_start_time = time.time()
             
             try:
-                returncode, stdout, stderr, eval_scores, output_dir = run_test(model_id, str(model_path), port)
+                model_path_str = str(model_path) if isinstance(model_path, Path) else model_path
+                returncode, stdout, stderr, eval_scores, output_dir = run_test(model_id, model_path_str, port)
                 
                 timing["test_execution_seconds"] = round(time.time() - test_start_time, 2)
                 
@@ -1155,8 +1213,6 @@ def parse_args():
     )
     parser.add_argument("-f", "--file", default=DEFAULT_JSON,
                         help=f"JSON file with model data (default: {DEFAULT_JSON})")
-    parser.add_argument("-d", "--model-dir", default=os.environ.get("MODEL_DIR", DEFAULT_MODEL_DIR),
-                        help=f"Model directory (default: {DEFAULT_MODEL_DIR})")
     parser.add_argument("-p", "--port", type=int, default=int(os.environ.get("VLLM_PORT", DEFAULT_PORT)),
                         help=f"vLLM port (default: {DEFAULT_PORT})")
     parser.add_argument("--tp", type=int, choices=[1, 2, 4, 8],
@@ -1183,8 +1239,8 @@ def parse_args():
                         help="List models and exit")
     parser.add_argument("--status", action="store_true",
                         help="Show experiment status and exit")
-    parser.add_argument("--parallel", type=int, default=MAX_GPUS,
-                        help=f"Number of models to run in parallel (default: {MAX_GPUS}, use 1 for sequential)")
+    parser.add_argument("--ray-address", default=os.environ.get("RAY_ADDRESS"),
+                        help="Ray cluster address (e.g., ray://head:10001). Required.")
     return parser.parse_args()
 
 
@@ -1231,7 +1287,7 @@ def show_status(state: Optional[ExperimentState]):
     print("=" * 70 + "\n")
 
 
-def should_skip_model(model_id: str, state: ExperimentState, fresh: bool, retry_failed: bool) -> tuple:
+def should_skip_model(model_id: str, state: ExperimentState, fresh: bool, retry_failed: bool, current_datasets: list = None) -> tuple:
     """
     Determine if a model should be skipped based on cache.
     Returns: (should_skip: bool, reason: str)
@@ -1244,10 +1300,18 @@ def should_skip_model(model_id: str, state: ExperimentState, fresh: bool, retry_
     if model_id not in state.results:
         return False, None
     
+    # Check if dataset configuration has changed - invalidate cache if so
+    if current_datasets is not None and state.datasets_config is not None:
+        cached_datasets = set(state.datasets_config) if isinstance(state.datasets_config, list) else set()
+        current_datasets_set = set(current_datasets) if isinstance(current_datasets, list) else set()
+        if cached_datasets != current_datasets_set:
+            logging.debug(f"Dataset config changed for {model_id}: cached={cached_datasets}, current={current_datasets_set} - invalidating cache")
+            return False, None  # Don't skip - rerun with new datasets
+    
     prev_result = state.results[model_id]
     prev_status = prev_result.status
     
-    # Always skip successful models
+    # Always skip successful models (only if datasets haven't changed)
     if prev_status == Status.SUCCESS:
         return True, f"cached: {prev_status.value}"
     
@@ -1274,7 +1338,6 @@ def should_skip_model(model_id: str, state: ExperimentState, fresh: bool, retry_
 
 def parallel_worker(
     model: dict,
-    model_dir: str,
     port: int,
     extra_args: str,
     dry_run: bool,
@@ -1311,7 +1374,7 @@ def parallel_worker(
         return model_id, result, True
     
     # Check cache
-    should_skip, skip_reason = should_skip_model(model_id, state, fresh, retry_failed)
+    should_skip, skip_reason = should_skip_model(model_id, state, fresh, retry_failed, current_datasets=DATASETS)
     if should_skip:
         logging.debug(f"[Worker GPU {gpu_ids}] Skipping {model_id} ({skip_reason})")
         return model_id, None, False  # Don't update state for cached models
@@ -1321,7 +1384,6 @@ def parallel_worker(
     # Run the test
     result = test_single_model(
         model=model,
-        model_dir=model_dir,
         port=port,
         extra_args=extra_args,
         dry_run=dry_run,
@@ -1414,10 +1476,10 @@ def main():
         logging.info(f"Skip list: {len(skip_models)} models from {SKIP_MODELS_FILE}")
     else:
         logging.info(f"No skip list found at {SKIP_MODELS_FILE}")
-    
     # Filter out models with TP > MAX_GPUS
+    
     original_count = len(models)
-    models = [m for m in models if m.get('tensor_parallel_size', 1) <= MAX_GPUS]
+    models = [m for k, m in models.items() if m.get('tensor_parallel_size', 1) <= MAX_GPUS]
     if len(models) < original_count:
         logging.info(f"Excluded {original_count - len(models)} models with TP > {MAX_GPUS}")
     
@@ -1471,7 +1533,7 @@ def main():
             skip_count += 1
             skip_list_count += 1
             continue
-        should_skip, _ = should_skip_model(m['model_id'], state, args.fresh, args.retry_failed)
+        should_skip, _ = should_skip_model(m['model_id'], state, args.fresh, args.retry_failed, current_datasets=DATASETS)
         if should_skip:
             skip_count += 1
         else:
@@ -1482,330 +1544,267 @@ def main():
         logging.info("Retry mode: will retry previously failed models")
     logging.info(f"Results will be saved to: {RESULTS_DIR}")
     
-    # Determine parallel settings
-    use_parallel = args.parallel > 1
-    if use_parallel:
-        logging.info(f"PARALLEL MODE: Using up to {MAX_GPUS} GPUs with dynamic allocation based on model TP size")
+    # Ray-only mode
+    use_ray = True
+    logging.info("RAY MODE: Scheduling model runs with Ray across nodes")
     
     # Run experiments
     run_idx = 0
     try:
-        if use_parallel:
-            # ============================================================
-            # PARALLEL EXECUTION MODE WITH DYNAMIC GPU ALLOCATION
-            # ============================================================
-            # Filter models that need to run (not cached/skipped)
-            models_to_run = []
-            for idx, model in enumerate(models, args.start + 1):
-                model_id = model['model_id']
-                if model_id in skip_models:
-                    # Handle skip list models
-                    result = ModelResult(
-                        model_id=model_id,
-                        model_name=model.get('model_name', model_id),
-                        size_bytes=model.get('size_bytes'),
-                        tp_size=model.get('tensor_parallel_size', 1),
-                        status=Status.SKIPPED,
-                        start_time=datetime.now().isoformat(),
-                        end_time=datetime.now().isoformat(),
-                        duration_seconds=0.0,
-                        vllm_error=f"Marked incomplete in skip list"
-                    )
-                    update_state_with_result(state, model_id, result)
-                    continue
-                    
-                should_skip, _ = should_skip_model(model_id, state, args.fresh, args.retry_failed)
-                if not should_skip:
-                    models_to_run.append((idx, model))
-            
-            # Count models by TP size
-            tp_counts = {}
-            for _, m in models_to_run:
-                tp = m.get('tensor_parallel_size', 1)
-                tp_counts[tp] = tp_counts.get(tp, 0) + 1
-            logging.info(f"Queued {len(models_to_run)} models for parallel execution: {tp_counts}")
-            
-            # ================================================================
-            # OPTIMIZED GPU SCHEDULER
-            # - Supports non-consecutive GPU IDs (vLLM remaps via CUDA_VISIBLE_DEVICES)
-            # - Best-fit bin packing: prioritizes jobs that best use available GPUs
-            # - Prevents GPU fragmentation by preferring larger jobs when possible
-            # - Detects actually free GPUs via nvidia-smi at startup
-            # ================================================================
-            
-            def detect_free_gpus(memory_threshold_mb: int = 500) -> set:
-                """
-                Detect GPUs that are actually free by checking nvidia-smi.
-                A GPU is considered free if its memory usage is below threshold.
+        # ============================================================
+        # RAY EXECUTION MODE (multi-node GPU scheduling)
+        # ============================================================
+        try:
+            import ray
+        except Exception as e:
+            logging.error(f"Ray is not available: {e}")
+            sys.exit(1)
+
+        # Initialize Ray (connect to existing cluster)
+        if not args.ray_address:
+            logging.error("--ray-address (or RAY_ADDRESS) is required to connect to a cluster")
+            sys.exit(1)
+        ray.init(address=args.ray_address, ignore_reinit_error=True)
+        logging.info(f"Connected to Ray cluster at: {args.ray_address}")
+
+        # Filter models that need to run (not cached/skipped)
+        models_to_run = []
+        for idx, model in enumerate(models, args.start + 1):
+            model_id = model['model_id']
+            if model_id in skip_models:
+                result = ModelResult(
+                    model_id=model_id,
+                    model_name=model.get('model_name', model_id),
+                    size_bytes=model.get('size_bytes'),
+                    tp_size=model.get('tensor_parallel_size', 1),
+                    status=Status.SKIPPED,
+                    start_time=datetime.now().isoformat(),
+                    end_time=datetime.now().isoformat(),
+                    duration_seconds=0.0,
+                    vllm_error=f"Marked incomplete in skip list"
+                )
+                update_state_with_result(state, model_id, result)
+                continue
+
+            should_skip, _ = should_skip_model(model_id, state, args.fresh, args.retry_failed, current_datasets=DATASETS)
+            if not should_skip:
+                models_to_run.append((idx, model))
+
+        logging.info(f"Queued {len(models_to_run)} models for Ray execution")
+
+        @ray.remote
+        def ray_worker(model: dict, base_port: int, extra_args: str, dry_run: bool, idx: int, total: int):
+            # Find a free port on this worker node (avoids collisions when multiple tasks land on same node)
+            port = find_free_port(start_port=base_port)
+            # Ray sets CUDA_VISIBLE_DEVICES to the allocated GPU list
+            return test_single_model(
+                model=model,
+                port=port,
+                extra_args=extra_args,
+                dry_run=dry_run,
+                state=None,
+                idx=idx,
+                total=total,
+                gpu_ids=None
+            )
+
+        def get_available_gpus() -> int:
+            """
+            Get the number of available GPUs in the Ray cluster.
+            Returns the total available GPUs (not allocated to running tasks).
+            """
+            try:
+                cluster_resources = ray.cluster_resources()
+                available_resources = ray.available_resources()
                 
-                Args:
-                    memory_threshold_mb: Max memory (MB) to consider GPU as free (default: 500MB)
+                total_gpus = cluster_resources.get('GPU', 0)
+                available_gpus = available_resources.get('GPU', 0)
                 
-                Returns:
-                    Set of free GPU IDs
-                """
-                try:
-                    result = subprocess.run(
-                        ["nvidia-smi", "--query-gpu=index,memory.used", "--format=csv,noheader,nounits"],
-                        capture_output=True, text=True, timeout=10
-                    )
-                    
-                    free_gpus = set()
-                    for line in result.stdout.strip().split('\n'):
-                        if line:
-                            parts = [p.strip() for p in line.split(',')]
-                            if len(parts) >= 2:
-                                gpu_id = int(parts[0])
-                                memory_used_mb = float(parts[1])
-                                if memory_used_mb < memory_threshold_mb:
-                                    free_gpus.add(gpu_id)
-                                else:
-                                    logging.warning(f"GPU {gpu_id} already in use ({memory_used_mb:.0f}MB), excluding from pool")
-                    
-                    return free_gpus
-                except Exception as e:
-                    logging.warning(f"Failed to detect free GPUs via nvidia-smi: {e}, assuming all {MAX_GPUS} GPUs free")
-                    return set(range(MAX_GPUS))
-            
-            # Detect actually free GPUs at startup
-            initial_free_gpus = detect_free_gpus()
-            if len(initial_free_gpus) < MAX_GPUS:
-                logging.info(f"Detected {len(initial_free_gpus)}/{MAX_GPUS} free GPUs: {sorted(initial_free_gpus)}")
-            else:
-                logging.info(f"All {MAX_GPUS} GPUs are free")
-            
-            if not initial_free_gpus:
-                logging.error("No free GPUs available! Exiting parallel mode.")
-                return
-            
-            available_gpus = initial_free_gpus.copy()
-            gpu_lock = threading.Lock()
-            base_port = args.port
-            port_counter = [0]  # Mutable counter for unique ports
-            
-            def allocate_gpus(tp_size: int) -> tuple:
-                """
-                Allocate any N available GPUs for a model.
-                vLLM handles non-consecutive GPUs via CUDA_VISIBLE_DEVICES remapping.
-                Returns (gpu_ids, port) or (None, None) if not enough GPUs.
-                """
-                with gpu_lock:
-                    if len(available_gpus) < tp_size:
-                        return None, None
-                    
-                    # Simply take the first N available GPUs (sorted for determinism)
-                    sorted_gpus = sorted(available_gpus)
-                    allocated = sorted_gpus[:tp_size]
-                    
-                    for gpu in allocated:
-                        available_gpus.remove(gpu)
-                    
-                    port = base_port + port_counter[0]
-                    port_counter[0] += 1
-                    return allocated, port
-            
-            def release_gpus(gpu_ids: list):
-                """Return GPUs to the pool."""
-                with gpu_lock:
-                    for gpu in gpu_ids:
-                        available_gpus.add(gpu)
-            
-            def get_available_gpu_count():
-                """Thread-safe check of available GPU count."""
-                with gpu_lock:
-                    return len(available_gpus)
-            
-            # Dynamic executor with resource-aware scheduling
-            max_workers = MAX_GPUS  # Maximum concurrent workers
-            with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                futures = {}
-                worker_idx = 0
-                model_queue = list(models_to_run)  # Copy to queue
+                # Round down to integer (Ray may report fractional GPUs)
+                available_gpus_int = int(available_gpus)
                 
-                def try_submit_next():
-                    """
-                    Smart scheduler using best-fit bin packing:
-                    1. If all GPUs free, prefer largest TP job (avoid fragmentation)
-                    2. Otherwise, find the largest job that fits available GPUs
-                    This maximizes GPU utilization and minimizes waiting.
-                    """
-                    nonlocal worker_idx
-                    
-                    if not model_queue:
-                        return False
-                    
-                    avail_gpus = get_available_gpu_count()
-                    if avail_gpus == 0:
-                        return False
-                    
-                    # Find the best fitting model (largest TP that fits)
-                    best_idx = None
-                    best_tp = 0
-                    
-                    for i, (idx, model) in enumerate(model_queue):
-                        tp_size = model.get('tensor_parallel_size', 1)
-                        if tp_size <= avail_gpus and tp_size > best_tp:
-                            best_tp = tp_size
-                            best_idx = i
-                    
-                    if best_idx is None:
-                        return False
-                    
-                    idx, model = model_queue.pop(best_idx)
-                    tp_size = model.get('tensor_parallel_size', 1)
-                    gpu_ids, port = allocate_gpus(tp_size)
-                    
-                    if gpu_ids is None:
-                        # Shouldn't happen, but handle gracefully
-                        model_queue.insert(best_idx, (idx, model))
-                        return False
-                    
-                    worker_idx += 1
-                    
-                    logging.info(f"[Scheduler] {model['model_id'][:40]} (TP={tp_size}) → GPUs {gpu_ids}, port {port} | Free: {get_available_gpu_count()}/{MAX_GPUS}")
-                    
-                    future = executor.submit(
-                        parallel_worker,
-                        model=model,
-                        model_dir=args.model_dir,
-                        port=port,
-                        extra_args=args.extra_args,
-                        dry_run=args.dry_run,
-                        state=state,
-                        idx=worker_idx,
-                        total=len(models_to_run),
-                        gpu_ids=gpu_ids,
-                        skip_models=skip_models,
-                        fresh=args.fresh,
-                        retry_failed=args.retry_failed
-                    )
-                    futures[future] = (gpu_ids, port, model['model_id'], tp_size)
-                    return True
-                
-                # Submit initial batch
-                while model_queue and try_submit_next():
-                    pass
-                
-                # Process completed jobs and submit new ones
-                while futures:
-                    # Wait for any job to complete
-                    done_futures = []
-                    for future in as_completed(futures):
-                        done_futures.append(future)
-                        break  # Process one at a time to reuse GPUs immediately
-                    
-                    for future in done_futures:
-                        gpu_ids, port, model_id, tp_size = futures.pop(future)
-                        
-                        try:
-                            result_model_id, result, should_update = future.result()
-                            if should_update and result:
-                                update_state_with_result(state, result_model_id, result)
-                                run_idx += 1
-                                logging.info(f"Progress: {run_idx}/{len(models_to_run)} | "
-                                           f"Success: {state.success} | Failed: {state.failed} | "
-                                           f"Free GPUs: {len(available_gpus) + len(gpu_ids)}")
-                        except Exception as e:
-                            logging.error(f"Worker error for {model_id}: {e}")
-                        
-                        # Release GPUs back to pool
-                        release_gpus(gpu_ids)
-                        
-                        # Try to submit more jobs with freed GPUs
-                        while model_queue and try_submit_next():
-                            pass
+                logging.debug(f"Cluster GPUs: {total_gpus} total, {available_gpus} available ({available_gpus_int} usable)")
+                return available_gpus_int
+            except Exception as e:
+                logging.warning(f"Error getting available GPUs: {e}, assuming 0 available")
+                return 0
+
+        # Dynamic scheduling: only submit models that fit in available GPUs
+        # This prevents large models from blocking smaller ones
+        models_queue = list(enumerate(models_to_run, start=1))  # (worker_idx, (idx, model))
+        futures = []  # List of (future, model_id, tp_size)
+        future_to_model = {}  # future -> model_id
+        submitted_count = 0
         
-        else:
-            # ============================================================
-            # SEQUENTIAL EXECUTION MODE (original behavior)
-            # ============================================================
-            for idx, model in enumerate(models, args.start + 1):
-                model_id = model['model_id']
-                
-                # Always skip models listed in the incomplete skip list
-                if model_id in skip_models:
-                    logging.info(f"[{idx}/{args.start + len(models)}] Skipping {model_id} (listed in {SKIP_MODELS_FILE})")
-                    result = ModelResult(
+        logging.info("Starting dynamic GPU scheduling: will only submit models that fit in available GPUs")
+        
+        # Initial check: submit models that fit
+        available_gpus = get_available_gpus()
+        logging.info(f"Initial available GPUs: {available_gpus}")
+        
+        # Submit initial batch of models that fit
+        while models_queue and available_gpus > 0:
+            worker_idx, (idx, model) = models_queue[0]
+            tp_size = model.get('tensor_parallel_size', 1)
+            
+            if tp_size <= available_gpus:
+                # This model fits - submit it
+                future = ray_worker.options(num_gpus=tp_size).remote(
+                    model, args.port, args.extra_args, args.dry_run, worker_idx, len(models_to_run)
+                )
+                futures.append((future, model['model_id'], tp_size))
+                future_to_model[future] = model['model_id']
+                models_queue.pop(0)
+                submitted_count += 1
+                available_gpus -= tp_size
+                logging.info(f"Submitted {model['model_id']} (TP={tp_size}, {submitted_count}/{len(models_to_run)} submitted, {available_gpus} GPUs remaining)")
+            else:
+                # This model doesn't fit - stop submitting for now
+                logging.debug(f"Cannot submit {model['model_id']} (TP={tp_size} > {available_gpus} available GPUs)")
+                break
+        
+        if models_queue:
+            logging.info(f"Queued {len(models_queue)} models waiting for GPUs (will submit dynamically as GPUs free up)")
+
+        # Collect results as they complete and submit more models dynamically
+        pending = [f for f, _, _ in futures]
+        while pending or models_queue:
+            if not pending:
+                # All submitted tasks are done, but we still have models in queue
+                # Check if any GPUs are available now
+                available_gpus = get_available_gpus()
+                if available_gpus > 0:
+                    # Try to submit more models
+                    while models_queue and available_gpus > 0:
+                        worker_idx, (idx, model) = models_queue[0]
+                        tp_size = model.get('tensor_parallel_size', 1)
+                        
+                        if tp_size <= available_gpus:
+                            future = ray_worker.options(num_gpus=tp_size).remote(
+                                model, args.port, args.extra_args, args.dry_run, worker_idx, len(models_to_run)
+                            )
+                            futures.append((future, model['model_id'], tp_size))
+                            future_to_model[future] = model['model_id']
+                            models_queue.pop(0)
+                            submitted_count += 1
+                            available_gpus -= tp_size
+                            pending.append(future)
+                            logging.info(f"Submitted {model['model_id']} (TP={tp_size}, {submitted_count}/{len(models_to_run)} submitted, {available_gpus} GPUs remaining)")
+                        else:
+                            # This model doesn't fit - wait for more GPUs
+                            logging.debug(f"Waiting for GPUs: {model['model_id']} needs {tp_size} GPUs, {available_gpus} available")
+                            break
+                else:
+                    # No GPUs available, wait a bit before checking again
+                    if models_queue:
+                        logging.debug(f"No GPUs available, {len(models_queue)} models waiting...")
+                        time.sleep(5)
+                    continue
+            
+            # Wait for at least one task to complete
+            done, pending = ray.wait(pending, num_returns=1, timeout=10.0)
+            
+            if not done:
+                # Timeout - check if we can submit more models
+                available_gpus = get_available_gpus()
+                if available_gpus > 0 and models_queue:
+                    # Try to submit more models
+                    while models_queue and available_gpus > 0:
+                        worker_idx, (idx, model) = models_queue[0]
+                        tp_size = model.get('tensor_parallel_size', 1)
+                        
+                        if tp_size <= available_gpus:
+                            future = ray_worker.options(num_gpus=tp_size).remote(
+                                model, args.port, args.extra_args, args.dry_run, worker_idx, len(models_to_run)
+                            )
+                            futures.append((future, model['model_id'], tp_size))
+                            future_to_model[future] = model['model_id']
+                            models_queue.pop(0)
+                            submitted_count += 1
+                            available_gpus -= tp_size
+                            pending.append(future)
+                            logging.info(f"Submitted {model['model_id']} (TP={tp_size}, {submitted_count}/{len(models_to_run)} submitted, {available_gpus} GPUs remaining)")
+                        else:
+                            break
+                continue
+            
+            # Process completed tasks
+            for finished in done:
+                model_id = future_to_model[finished]
+                try:
+                    result = ray.get(finished)
+                    update_state_with_result(state, model_id, result)
+                    run_idx += 1
+                    
+                    # Get TP size of completed task to update available GPUs estimate
+                    completed_tp = next((tp for f, mid, tp in futures if mid == model_id), 1)
+                    available_gpus = get_available_gpus()
+                    
+                    logging.info(f"Progress: {run_idx}/{len(models_to_run)} | "
+                                 f"Success: {state.success} | Failed: {state.failed} | "
+                                 f"Available GPUs: {available_gpus}")
+                    
+                    # Try to submit more models now that GPUs are freed
+                    while models_queue and available_gpus > 0:
+                        worker_idx, (idx, model) = models_queue[0]
+                        tp_size = model.get('tensor_parallel_size', 1)
+                        
+                        if tp_size <= available_gpus:
+                            future = ray_worker.options(num_gpus=tp_size).remote(
+                                model, args.port, args.extra_args, args.dry_run, worker_idx, len(models_to_run)
+                            )
+                            futures.append((future, model['model_id'], tp_size))
+                            future_to_model[future] = model['model_id']
+                            models_queue.pop(0)
+                            submitted_count += 1
+                            available_gpus -= tp_size
+                            pending.append(future)
+                            logging.info(f"Submitted {model['model_id']} (TP={tp_size}, {submitted_count}/{len(models_to_run)} submitted, {available_gpus} GPUs remaining)")
+                        else:
+                            # This model doesn't fit yet
+                            break
+                            
+                except Exception as e:
+                    logging.error(f"Ray worker error for {model_id}: {e}")
+                    tb = traceback.format_exc()
+                    fail_result = ModelResult(
                         model_id=model_id,
-                        model_name=model.get('model_name', model_id),
-                        size_bytes=model.get('size_bytes'),
-                        tp_size=model.get('tensor_parallel_size', 1),
-                        status=Status.SKIPPED,
+                        model_name=model_id,
+                        size_bytes=0,
+                        tp_size=0,
+                        status=Status.UNKNOWN_ERROR,
                         start_time=datetime.now().isoformat(),
                         end_time=datetime.now().isoformat(),
                         duration_seconds=0.0,
-                        vllm_error=f"Marked incomplete in {SKIP_MODELS_FILE}"
+                        vllm_error=f"Ray worker exception: {type(e).__name__}: {e}",
+                        traceback=tb,
                     )
+                    save_error(model_id, "RAY_WORKER_EXCEPTION", str(e), {
+                        "traceback": tb,
+                    })
+                    update_state_with_result(state, model_id, fail_result)
+                    run_idx += 1
                     
-                    # Update state counters (handling reruns)
-                    old_result = state.results.get(model_id)
-                    if old_result:
-                        if old_result.status == Status.SUCCESS:
-                            state.success = max(0, state.success - 1)
-                        elif old_result.status == Status.SKIPPED:
-                            state.skipped = max(0, state.skipped - 1)
+                    # Check available GPUs after task failure and try to submit more
+                    available_gpus = get_available_gpus()
+                    
+                    while models_queue and available_gpus > 0:
+                        worker_idx, (idx, model) = models_queue[0]
+                        tp_size = model.get('tensor_parallel_size', 1)
+                        
+                        if tp_size <= available_gpus:
+                            future = ray_worker.options(num_gpus=tp_size).remote(
+                                model, args.port, args.extra_args, args.dry_run, worker_idx, len(models_to_run)
+                            )
+                            futures.append((future, model['model_id'], tp_size))
+                            future_to_model[future] = model['model_id']
+                            models_queue.pop(0)
+                            submitted_count += 1
+                            available_gpus -= tp_size
+                            pending.append(future)
+                            logging.info(f"Submitted {model['model_id']} (TP={tp_size}, {submitted_count}/{len(models_to_run)} submitted, {available_gpus} GPUs remaining)")
                         else:
-                            state.failed = max(0, state.failed - 1)
-                        state.completed = max(0, state.completed - 1)
-                    
-                    state.results[model_id] = result
-                    state.completed += 1
-                    state.skipped += 1
-                    save_state(state)
-                    continue
-                
-                # Check if should skip (cache check)
-                should_skip, skip_reason = should_skip_model(
-                    model_id, state, args.fresh, args.retry_failed
-                )
-                
-                if should_skip:
-                    logging.debug(f"[{idx}/{args.start + len(models)}] Skipping {model_id} ({skip_reason})")
-                    continue
-                
-                run_idx += 1
-                logging.info(f"[{run_idx}/{run_count}] (overall {idx}/{args.start + len(models)})")
-                
-                # Test the model
-                result = test_single_model(
-                    model=model,
-                    model_dir=args.model_dir,
-                    port=args.port,
-                    extra_args=args.extra_args,
-                    dry_run=args.dry_run,
-                    state=state,
-                    idx=run_idx,
-                    total=run_count
-                )
-                
-                # Update state counts (handle re-runs properly)
-                old_result = state.results.get(model_id)
-                if old_result:
-                    # Decrement old counts
-                    if old_result.status == Status.SUCCESS:
-                        state.success = max(0, state.success - 1)
-                    elif old_result.status == Status.SKIPPED:
-                        state.skipped = max(0, state.skipped - 1)
-                    else:
-                        state.failed = max(0, state.failed - 1)
-                    state.completed = max(0, state.completed - 1)
-                
-                # Update with new result
-                state.results[model_id] = result
-                state.completed += 1
-                
-                if result.status == Status.SUCCESS:
-                    state.success += 1
-                elif result.status == Status.SKIPPED:
-                    state.skipped += 1
-                else:
-                    state.failed += 1
-                
-                # Save state after each model
-                save_state(state)
-                
-                logging.info(f"Progress: {run_idx}/{run_count} | "
-                            f"Success: {state.success} | Failed: {state.failed} | Cached: {skip_count}")
+                            break
     
     except KeyboardInterrupt:
         logging.warning("Interrupted by user - state saved")
