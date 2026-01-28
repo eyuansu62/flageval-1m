@@ -562,19 +562,6 @@
           </table>
         </div>
       </section>
-
-      <section class="panel">
-        <div class="detail-grid">
-          <div>
-              <h3 class="panel-title">Selected Model</h3>
-              <div id="detail-summary" class="hint">Click a row to view details.</div>
-          </div>
-          <div>
-              <h3 class="panel-title">Raw JSON</h3>
-            <pre id="detail-json">{}</pre>
-          </div>
-        </div>
-      </section>
     </main>
     </div>
 
@@ -977,20 +964,6 @@
         `).join('');
       };
 
-      const renderDetails = (row) => {
-        if (!row) {
-          document.getElementById('detail-summary').textContent = 'Click a row to view details.';
-          document.getElementById('detail-json').textContent = '{}';
-          return;
-        }
-        document.getElementById('detail-summary').innerHTML = `
-          <div><strong>${row.model_id}</strong></div>
-          <div class="hint">Status: ${row.status} · Score: ${formatNumber(row.avg_score, 4)}</div>
-          <div class="hint">Duration: ${formatNumber(row.duration_seconds, 1)}s · TP: ${row.tp_size ?? '–'}</div>
-        `;
-        document.getElementById('detail-json').textContent = JSON.stringify(row.raw, null, 2);
-      };
-
       // Load data
       const loadData = async () => {
         try {
@@ -1007,9 +980,11 @@
 
           // Load results - try multiple paths for different GitHub Pages setups
           const possiblePaths = [
-            '../experiment_results/results.json',  // If served from results_viewer/
-            'experiment_results/results.json',      // If served from root
-            './experiment_results/results.json',    // Alternative root path
+            'results.json',                          // Same directory (best for GitHub Pages)
+            './results.json',                        // Same directory (alternative)
+            '../experiment_results/results.json',    // If served from results_viewer/
+            'experiment_results/results.json',       // If served from root
+            './experiment_results/results.json',     // Alternative root path
           ];
           
           let resultsRes = null;
@@ -1039,11 +1014,6 @@
       };
 
       // Event listeners
-      document.getElementById('results-body').addEventListener('click', e => {
-        const tr = e.target.closest('tr');
-        if (tr) renderDetails(state.filtered[Number(tr.dataset.index)]);
-      });
-
       ['search-input', 'status-filter', 'min-score', 'sort-by'].forEach(id => {
         document.getElementById(id).addEventListener('input', applyFilters);
         document.getElementById(id).addEventListener('change', applyFilters);

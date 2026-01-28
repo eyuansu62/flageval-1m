@@ -18,15 +18,68 @@ A simple, self-contained web viewer for experiment results.
    http://localhost:8000/results_viewer/
    ```
 
-### GitHub Pages
+### Access from Internal Network
 
-See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed instructions.
+To allow others on your network to access the viewer:
 
-**Quick setup:**
-1. Commit and push your files
-2. Go to repository Settings → Pages
-3. Select "Deploy from a branch" → choose `main` and `/ (root)`
-4. Your site will be at: `https://username.github.io/repo-name/results_viewer/`
+**Option 1: Use the helper script (easiest)**
+```bash
+cd results_viewer
+./serve_local.sh
+```
+This script will automatically find your IP and start the server. It will show you both local and network URLs.
+
+**Option 2: Manual setup**
+
+1. **Start the server bound to your network interface:**
+   ```bash
+   # From repository root
+   python -m http.server 8000 --bind 0.0.0.0
+   # or
+   python3 -m http.server 8000 --bind 0.0.0.0
+   ```
+
+2. **Find your local IP address:**
+   ```bash
+   # Linux
+   hostname -I
+   # or
+   ip addr show | grep "inet " | grep -v 127.0.0.1
+   
+   # Mac
+   ifconfig | grep "inet " | grep -v 127.0.0.1
+   ```
+
+3. **Access from other devices on the same network:**
+   ```
+   http://YOUR_LOCAL_IP:8000/results_viewer/
+   # Example: http://192.168.1.100:8000/results_viewer/
+   ```
+
+4. **Make sure firewall allows connections:**
+   ```bash
+   # Linux (if using ufw)
+   sudo ufw allow 8000/tcp
+   
+   # Check firewall status
+   sudo ufw status
+   ```
+
+### GitHub Pages (Public Access)
+
+Your GitHub Pages site is accessible from anywhere with internet, including your internal network:
+
+**Your site URL:**
+```
+https://eyuansu62.github.io/flageval-1m/results_viewer/
+```
+
+**To access from your network:**
+- Simply open the URL above in any browser on any device connected to the internet
+- No special configuration needed - GitHub Pages is publicly accessible
+- Works on phones, tablets, other computers, etc.
+
+See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed setup instructions.
 
 ## Features
 

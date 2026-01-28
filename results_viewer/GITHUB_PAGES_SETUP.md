@@ -2,74 +2,124 @@
 
 This guide explains how to host the results viewer on GitHub Pages.
 
-## Option 1: Serve from `results_viewer` subdirectory (Recommended)
+## ⚠️ Important: `experiment_results/` is gitignored
 
-If your repository is `username/evalscope-experiment-runner`, the website will be available at:
-```
-https://username.github.io/evalscope-experiment-runner/results_viewer/
-```
+Since `experiment_results/` is in `.gitignore`, you need to copy `results.json` to a location that will be committed. Choose one of the options below.
+
+## Option 1: Copy results.json to results_viewer (Recommended)
+
+This is the simplest approach for your repository `eyuansu62/flageval-1m`.
 
 ### Steps:
 
-1. **Ensure your files are committed:**
+1. **Copy results.json to the viewer directory:**
+   ```bash
+   cp experiment_results/results.json results_viewer/results.json
+   ```
+
+2. **Update the HTML to look for the local file first:**
+   The HTML already tries multiple paths, but we should prioritize the local one. The current code will work, but you can also manually update the fetch paths if needed.
+
+3. **Commit and push:**
    ```bash
    git add results_viewer/index.html
-   git add experiment_results/results.json
+   git add results_viewer/results.json
    git commit -m "Add results viewer for GitHub Pages"
    git push
    ```
 
-2. **Enable GitHub Pages:**
-   - Go to your repository on GitHub
+4. **Enable GitHub Pages (if not already enabled):**
+   - Go to your repository on GitHub: `https://github.com/eyuansu62/flageval-1m`
    - Click **Settings** → **Pages** (in the left sidebar)
    - Under **Source**, select **Deploy from a branch**
    - Choose **main** (or your default branch) and **/ (root)**
    - Click **Save**
 
-3. **Wait for deployment:**
-   - GitHub will build and deploy your site (usually takes 1-2 minutes)
-   - You'll see a green checkmark when it's ready
-   - Your site will be live at the URL shown in the Pages settings
+5. **Access your site:**
+   - Your site will be at: `https://eyuansu62.github.io/flageval-1m/results_viewer/`
+   - The viewer will automatically load `results.json` from the same directory
 
-4. **Access your site:**
-   - Visit: `https://username.github.io/evalscope-experiment-runner/results_viewer/`
-   - The viewer will automatically try to load `results.json` from `../experiment_results/results.json`
+## Option 2: Use GitHub Releases or Raw GitHub URLs
 
-## Option 2: Serve from repository root
+If `results.json` is too large or you don't want to commit it:
 
-If you want the site at `https://username.github.io/evalscope-experiment-runner/`:
+1. **Upload results.json to GitHub Releases:**
+   - Go to your repo → Releases → Create a new release
+   - Upload `results.json` as an asset
+   - Get the direct download URL
 
-1. **Move files to root:**
+2. **Or use raw.githubusercontent.com:**
+   - Commit `results.json` to a branch (even if gitignored, you can force add it)
+   - Use URL: `https://raw.githubusercontent.com/eyuansu62/flageval-1m/main/path/to/results.json`
+
+3. **Update the HTML fetch path** to use the direct URL
+
+## Option 3: Serve from repository root
+
+If you want the site at `https://eyuansu62.github.io/flageval-1m/`:
+
+1. **Copy files to root:**
    ```bash
    cp results_viewer/index.html ./index.html
+   cp experiment_results/results.json ./results.json
    ```
 
-2. **Update the fetch path in `index.html`:**
-   Change `../experiment_results/results.json` to `experiment_results/results.json`
+2. **Commit and push:**
+   ```bash
+   git add index.html results.json
+   git commit -m "Add results viewer to root"
+   git push
+   ```
 
-3. **Enable GitHub Pages** (same as Option 1, step 2)
+3. **Enable GitHub Pages** (same as Option 1, step 4)
 
-## Option 3: Use `docs` folder
+## Option 4: Use `docs` folder
 
 1. **Create a `docs` folder and copy files:**
    ```bash
    mkdir -p docs
    cp results_viewer/index.html docs/
-   # Keep experiment_results at root or copy it
+   cp experiment_results/results.json docs/results.json
    ```
 
-2. **Update paths in `index.html`** to point to the correct location
+2. **Commit and push:**
+   ```bash
+   git add docs/
+   git commit -m "Add results viewer to docs folder"
+   git push
+   ```
 
 3. **Enable GitHub Pages:**
    - In Settings → Pages, select **Deploy from a branch**
    - Choose **main** and **/docs**
+   - Your site will be at: `https://eyuansu62.github.io/flageval-1m/`
+
+## Quick Setup Summary
+
+**For your repository (`eyuansu62/flageval-1m`):**
+
+```bash
+# 1. Copy results.json to results_viewer directory
+cp experiment_results/results.json results_viewer/results.json
+
+# 2. Commit and push
+git add results_viewer/
+git commit -m "Add results viewer"
+git push
+
+# 3. Your site will be at:
+# https://eyuansu62.github.io/flageval-1m/results_viewer/
+```
+
+The HTML already tries to load `results.json` from the same directory first, so it will work automatically!
 
 ## File Size Considerations
 
-GitHub has a 100MB file size limit. If `results.json` is very large:
+GitHub has a 100MB file size limit per file. If `results.json` is very large:
 - Consider compressing it or splitting it
-- Or use the file picker feature in the viewer to let users upload their own file
+- Or use the file picker feature in the viewer (users can upload their own file)
 - Or host the JSON file elsewhere (e.g., GitHub Releases, raw.githubusercontent.com)
+- Or use Git LFS (Large File Storage) if the file is between 50-100MB
 
 ## Custom Domain (Optional)
 
