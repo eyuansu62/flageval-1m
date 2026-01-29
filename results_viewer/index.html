@@ -546,18 +546,7 @@
       <section class="panel">
         <div class="table-wrapper">
           <table>
-            <thead>
-              <tr>
-                <th>Model</th>
-                <th>Status</th>
-                <th>Avg score</th>
-                  <th>Duration</th>
-                <th>Size</th>
-                <th>TP</th>
-                  <th>GPU mem</th>
-                  <th>Error</th>
-              </tr>
-            </thead>
+            <thead id="results-header"></thead>
             <tbody id="results-body"></tbody>
           </table>
         </div>
@@ -639,6 +628,7 @@
         filtered: [],
         failures: [],
         filteredFailures: [],
+        datasets: [],
       };
 
       const CATEGORY_DESCRIPTIONS = {
@@ -924,6 +914,51 @@
           statuses.map(s => `<option value="${s}">${s}</option>`).join('');
       };
 
+      const getDatasets = () => {
+        if (state.datasets && state.datasets.length) return state.datasets;
+
+        // Prefer datasets from summary metadata if available
+        const fromSummary = state.summary?.experiment?.datasets || [];
+        if (fromSummary && fromSummary.length) {
+          state.datasets = fromSummary;
+          return state.datasets;
+        }
+
+        // Fallback: infer from eval_scores keys in rows
+        const dsSet = new Set();
+        state.rows.forEach(r => {
+          const scores = r.raw?.eval_scores || {};
+          Object.keys(scores).forEach(k => dsSet.add(k));
+        });
+        state.datasets = Array.from(dsSet).sort();
+        return state.datasets;
+      };
+
+      const buildResultsHeader = () => {
+        const headerEl = document.getElementById('results-header');
+        if (!headerEl) return;
+
+        const datasets = getDatasets();
+        const baseCols = [
+          'Model',
+          'Status',
+          'Avg score',
+          'Duration',
+          'Size',
+          'TP',
+          'GPU mem',
+        ];
+
+        const html =
+          '<tr>' +
+          baseCols.map(c => `<th>${c}</th>`).join('') +
+          datasets.map(d => `<th>${d}</th>`).join('') +
+          '<th>Error</th>' +
+          '</tr>';
+
+        headerEl.innerHTML = html;
+      };
+
       const applyFilters = () => {
         const search = document.getElementById('search-input').value.toLowerCase();
         const status = document.getElementById('status-filter').value;
@@ -950,7 +985,15 @@
       };
 
       const renderTable = () => {
-        document.getElementById('results-body').innerHTML = state.filtered.map((r, i) => `
+        const datasets = getDatasets();
+        document.getElementById('results-body').innerHTML = state.filtered.map((r, i) => {
+          const scoreCells = datasets.map(name => {
+            const v = r.raw?.eval_scores?.[name]?.score;
+            const val = typeof v === 'number' ? v : null;
+            return `<td>${formatNumber(val, 4)}</td>`;
+          }).join('');
+
+          return `
           <tr data-index="${i}">
             <td>${r.model_id}</td>
             <td><span class="status-pill ${statusColors(r.status)}">${r.status}</span></td>
@@ -959,9 +1002,10 @@
             <td>${formatBytes(r.size_bytes)}</td>
             <td>${r.tp_size ?? '–'}</td>
             <td>${formatNumber(r.gpu_memory_gb, 1)}</td>
+            ${scoreCells}
             <td class="hint">${r.error_short || '–'}</td>
-              </tr>
-        `).join('');
+          </tr>`;
+        }).join('');
       };
 
       // Load data
@@ -973,6 +1017,8 @@
             state.summary = await summaryRes.json();
             state.failures = buildFailures(state.summary);
             state.filteredFailures = state.failures;
+            // Build results header as soon as we know dataset list
+            buildResultsHeader();
             updateCharts();
             updateActionLists();
             renderFailures();
@@ -1002,6 +1048,8 @@
             state.rows = buildRows(state.raw);
             state.filtered = state.rows;
             updateSummaryCards();
+            // Ensure header is built even if summary_data.json is missing
+            buildResultsHeader();
             updateStatusFilter();
             applyFilters();
             document.getElementById('load-status').textContent =
