@@ -1,0 +1,3190 @@
+{
+  "completed": 68,
+  "datasets_config": [
+    "mmlu",
+    "mmlu_pro",
+    "math_500",
+    "gsm8k",
+    "gpqa_diamond"
+  ],
+  "failed": 0,
+  "hostname": "baai-sailing-3",
+  "python_version": "3.11.14",
+  "results": {
+    "01-ai/Yi-34B-Chat": {
+      "datasets_tested": null,
+      "duration_seconds": 1330.75,
+      "end_time": "2026-01-27T08:48:41.599524",
+      "eval_output_dir": "outputs/01-ai_Yi-34B-Chat",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.28,
+          "score": 0.28
+        },
+        "gsm8k": {
+          "overall": 0.53,
+          "score": 0.53
+        },
+        "math_500": {
+          "overall": 0.224,
+          "score": 0.224
+        },
+        "mmlu": {
+          "overall": 0.5582,
+          "score": 0.5582
+        },
+        "mmlu_pro": {
+          "overall": 0.3343,
+          "score": 0.3343
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "01-ai/Yi-34B-Chat",
+      "model_name": "01-ai/Yi-34B-Chat",
+      "size_bytes": 34388917248,
+      "start_time": "2026-01-27T08:26:30.852665",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3937710,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "AIDC-AI/Marco-o1": {
+      "datasets_tested": null,
+      "duration_seconds": 2550.33,
+      "end_time": "2026-01-27T07:51:30.567784",
+      "eval_output_dir": "outputs/AIDC-AI_Marco-o1",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.39,
+          "score": 0.39
+        },
+        "gsm8k": {
+          "overall": 0.89,
+          "score": 0.89
+        },
+        "math_500": {
+          "overall": 0.7275,
+          "score": 0.7275
+        },
+        "mmlu": {
+          "overall": 0.6534,
+          "score": 0.6534
+        },
+        "mmlu_pro": {
+          "overall": 0.49,
+          "score": 0.49
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "AIDC-AI/Marco-o1",
+      "model_name": "AIDC-AI/Marco-o1",
+      "size_bytes": 7615616512,
+      "start_time": "2026-01-27T07:09:00.240599",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3744572,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Alibaba-NLP/Tongyi-DeepResearch-30B-A3B": {
+      "datasets_tested": null,
+      "duration_seconds": 5349.8,
+      "end_time": "2026-01-28T23:17:29.327013",
+      "eval_output_dir": "outputs/20260122_142514",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.13,
+          "score": 0.13
+        },
+        "gsm8k": {
+          "overall": 0.91,
+          "score": 0.91
+        },
+        "math_500": {
+          "overall": 0.5381,
+          "score": 0.5381
+        },
+        "mmlu": {
+          "overall": 0.6826,
+          "score": 0.6826
+        },
+        "mmlu_pro": {
+          "overall": 0.3721,
+          "score": 0.3721
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Alibaba-NLP/Tongyi-DeepResearch-30B-A3B",
+      "model_name": "Alibaba-NLP/Tongyi-DeepResearch-30B-A3B",
+      "size_bytes": 30532122624,
+      "start_time": "2026-01-28T21:48:19.527891",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2794525,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "BioMistral/BioMistral-7B": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 655.37,
+      "end_time": "2026-01-29T13:50:23.186439",
+      "eval_output_dir": "outputs/BioMistral_BioMistral-7B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.13,
+          "score": 0.13
+        },
+        "gsm8k": {
+          "overall": 0.09,
+          "score": 0.09
+        },
+        "math_500": {
+          "overall": 0.0508,
+          "score": 0.0508
+        },
+        "mmlu": {
+          "overall": 0.1744,
+          "score": 0.1744
+        },
+        "mmlu_pro": {
+          "overall": 0.1107,
+          "score": 0.1107
+        }
+      },
+      "gpu_memory_gb": 766.67,
+      "model_id": "BioMistral/BioMistral-7B",
+      "model_name": "BioMistral/BioMistral-7B",
+      "size_bytes": 14486259862,
+      "start_time": "2026-01-29T13:39:27.812128",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 50.02,
+        "test_execution_seconds": 589.33,
+        "total_seconds": 655.37
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2251585,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "FractalAIResearch/Fathom-R1-14B": {
+      "datasets_tested": null,
+      "duration_seconds": 9644.52,
+      "end_time": "2026-01-27T13:40:16.909381",
+      "eval_output_dir": "outputs/FractalAIResearch_Fathom-R1-14B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.16,
+          "score": 0.16
+        },
+        "gsm8k": {
+          "overall": 0.93,
+          "score": 0.93
+        },
+        "math_500": {
+          "overall": 0.6374,
+          "score": 0.6374
+        },
+        "mmlu": {
+          "overall": 0.7095,
+          "score": 0.7095
+        },
+        "mmlu_pro": {
+          "overall": 0.4364,
+          "score": 0.4364
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "FractalAIResearch/Fathom-R1-14B",
+      "model_name": "FractalAIResearch/Fathom-R1-14B",
+      "size_bytes": 14770033664,
+      "start_time": "2026-01-27T10:59:32.389696",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 109210,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1": {
+      "datasets_tested": null,
+      "duration_seconds": 2463.1,
+      "end_time": "2026-01-27T16:04:01.070883",
+      "eval_output_dir": "outputs/HuggingFaceH4_zephyr-orpo-141b-A35b-v0.1",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.31,
+          "score": 0.31
+        },
+        "gsm8k": {
+          "overall": 0.67,
+          "score": 0.67
+        },
+        "math_500": {
+          "overall": 0.455,
+          "score": 0.455
+        },
+        "mmlu": {
+          "overall": 0.593,
+          "score": 0.593
+        },
+        "mmlu_pro": {
+          "overall": 0.4879,
+          "score": 0.4879
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1",
+      "model_name": "HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1",
+      "size_bytes": 140620634112,
+      "start_time": "2026-01-27T15:22:57.973307",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 702224,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 346.83,
+      "end_time": "2026-01-28T22:40:23.248587",
+      "eval_output_dir": "outputs/HuggingFaceTB_SmolLM2-1.7B-Instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.23,
+          "score": 0.23
+        },
+        "gsm8k": {
+          "overall": 0.36,
+          "score": 0.36
+        },
+        "math_500": {
+          "overall": 0.2448,
+          "score": 0.2448
+        },
+        "mmlu": {
+          "overall": 0.2705,
+          "score": 0.2705
+        },
+        "mmlu_pro": {
+          "overall": 0.1393,
+          "score": 0.1393
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "model_name": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "size_bytes": 1711376384,
+      "start_time": "2026-01-28T22:34:36.418086",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 525609,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "HuggingFaceTB/SmolLM2-135M-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 625.54,
+      "end_time": "2026-01-27T12:53:46.997946",
+      "eval_output_dir": "outputs/HuggingFaceTB_SmolLM2-135M-Instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.07,
+          "score": 0.07
+        },
+        "gsm8k": {
+          "overall": 0.0,
+          "score": 0.0
+        },
+        "math_500": {
+          "overall": 0.0162,
+          "score": 0.0162
+        },
+        "mmlu": {
+          "overall": 0.0439,
+          "score": 0.0439
+        },
+        "mmlu_pro": {
+          "overall": 0.0129,
+          "score": 0.0129
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "model_name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "size_bytes": 134515008,
+      "start_time": "2026-01-27T12:43:21.455905",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 342719,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "LGAI-EXAONE/EXAONE-4.0-32B": {
+      "datasets_tested": null,
+      "duration_seconds": 2840.85,
+      "end_time": "2026-01-29T01:56:39.375438",
+      "eval_output_dir": "outputs/20260123_000809",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.53,
+          "score": 0.53
+        },
+        "gsm8k": {
+          "overall": 0.97,
+          "score": 0.97
+        },
+        "math_500": {
+          "overall": 0.8014,
+          "score": 0.8014
+        },
+        "mmlu": {
+          "overall": 0.8723,
+          "score": 0.8723
+        },
+        "mmlu_pro": {
+          "overall": 0.7436,
+          "score": 0.7436
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "LGAI-EXAONE/EXAONE-4.0-32B",
+      "model_name": "LGAI-EXAONE/EXAONE-4.0-32B",
+      "size_bytes": 32003216384,
+      "start_time": "2026-01-29T01:09:18.529999",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3181141,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "LGAI-EXAONE/EXAONE-Deep-32B": {
+      "datasets_tested": null,
+      "duration_seconds": 7872.47,
+      "end_time": "2026-01-27T12:43:21.105657",
+      "eval_output_dir": "outputs/LGAI-EXAONE_EXAONE-Deep-32B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.1,
+          "score": 0.1
+        },
+        "gsm8k": {
+          "overall": 0.73,
+          "score": 0.73
+        },
+        "math_500": {
+          "overall": 0.4065,
+          "score": 0.4065
+        },
+        "mmlu": {
+          "overall": 0.6212,
+          "score": 0.6212
+        },
+        "mmlu_pro": {
+          "overall": 0.3143,
+          "score": 0.3143
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "LGAI-EXAONE/EXAONE-Deep-32B",
+      "model_name": "LGAI-EXAONE/EXAONE-Deep-32B",
+      "size_bytes": 32003200000,
+      "start_time": "2026-01-27T10:32:08.631058",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 37108,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "LLM360/K2-Think": {
+      "datasets_tested": null,
+      "duration_seconds": 6228.02,
+      "end_time": "2026-01-27T10:07:03.533048",
+      "eval_output_dir": "outputs/LLM360_K2-Think",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.13,
+          "score": 0.13
+        },
+        "gsm8k": {
+          "overall": 0.94,
+          "score": 0.94
+        },
+        "math_500": {
+          "overall": 0.6028,
+          "score": 0.6028
+        },
+        "mmlu": {
+          "overall": 0.787,
+          "score": 0.787
+        },
+        "mmlu_pro": {
+          "overall": 0.4914,
+          "score": 0.4914
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "LLM360/K2-Think",
+      "model_name": "LLM360/K2-Think",
+      "size_bytes": 32763876352,
+      "start_time": "2026-01-27T08:23:15.508694",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3929387,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "LiquidAI/LFM2-8B-A1B": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 1275.67,
+      "end_time": "2026-01-29T14:19:01.956962",
+      "eval_output_dir": "outputs/LiquidAI_LFM2-8B-A1B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.29,
+          "score": 0.29
+        },
+        "gsm8k": {
+          "overall": 0.89,
+          "score": 0.89
+        },
+        "math_500": {
+          "overall": 0.7621,
+          "score": 0.7621
+        },
+        "mmlu": {
+          "overall": 0.7207,
+          "score": 0.7207
+        },
+        "mmlu_pro": {
+          "overall": 0.5064,
+          "score": 0.5064
+        }
+      },
+      "gpu_memory_gb": 452.06,
+      "model_id": "LiquidAI/LFM2-8B-A1B",
+      "model_name": "LiquidAI/LFM2-8B-A1B",
+      "size_bytes": 8339929856,
+      "start_time": "2026-01-29T13:57:46.285727",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 80.05,
+        "test_execution_seconds": 1186.55,
+        "total_seconds": 1275.67
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2304305,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "Nexusflow/Starling-LM-7B-beta": {
+      "datasets_tested": null,
+      "duration_seconds": 1414.74,
+      "end_time": "2026-01-29T00:33:02.599132",
+      "eval_output_dir": "outputs/Nexusflow_Starling-LM-7B-beta",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.25,
+          "score": 0.25
+        },
+        "gsm8k": {
+          "overall": 0.7,
+          "score": 0.7
+        },
+        "math_500": {
+          "overall": 0.3118,
+          "score": 0.3118
+        },
+        "mmlu": {
+          "overall": 0.5393,
+          "score": 0.5393
+        },
+        "mmlu_pro": {
+          "overall": 0.3121,
+          "score": 0.3121
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Nexusflow/Starling-LM-7B-beta",
+      "model_name": "Nexusflow/Starling-LM-7B-beta",
+      "size_bytes": 14485418342,
+      "start_time": "2026-01-29T00:09:27.860376",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 722371,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "NousResearch/DeepHermes-3-Llama-3-8B-Preview": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 1037.05,
+      "end_time": "2026-01-29T14:00:13.711534",
+      "eval_output_dir": "outputs/NousResearch_DeepHermes-3-Llama-3-8B-Preview",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.31,
+          "score": 0.31
+        },
+        "gsm8k": {
+          "overall": 0.76,
+          "score": 0.76
+        },
+        "math_500": {
+          "overall": 0.2933,
+          "score": 0.2933
+        },
+        "mmlu": {
+          "overall": 0.6447,
+          "score": 0.6447
+        },
+        "mmlu_pro": {
+          "overall": 0.4121,
+          "score": 0.4121
+        }
+      },
+      "gpu_memory_gb": 666.91,
+      "model_id": "NousResearch/DeepHermes-3-Llama-3-8B-Preview",
+      "model_name": "NousResearch/DeepHermes-3-Llama-3-8B-Preview",
+      "size_bytes": 8030261248,
+      "start_time": "2026-01-29T13:42:56.658689",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 65.05,
+        "test_execution_seconds": 953.07,
+        "total_seconds": 1037.05
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2262702,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "NousResearch/Hermes-2-Pro-Llama-3-8B": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 929.28,
+      "end_time": "2026-01-29T13:56:38.195242",
+      "eval_output_dir": "outputs/NousResearch_Hermes-2-Pro-Llama-3-8B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.31,
+          "score": 0.31
+        },
+        "gsm8k": {
+          "overall": 0.69,
+          "score": 0.69
+        },
+        "math_500": {
+          "overall": 0.3072,
+          "score": 0.3072
+        },
+        "mmlu": {
+          "overall": 0.6168,
+          "score": 0.6168
+        },
+        "mmlu_pro": {
+          "overall": 0.37,
+          "score": 0.37
+        }
+      },
+      "gpu_memory_gb": 582.61,
+      "model_id": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+      "model_name": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+      "size_bytes": 8030523392,
+      "start_time": "2026-01-29T13:41:08.917764",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 60.04,
+        "test_execution_seconds": 860.31,
+        "total_seconds": 929.28
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2257415,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "NousResearch/Hermes-2-Pro-Mistral-7B": {
+      "datasets_tested": null,
+      "duration_seconds": 1137.52,
+      "end_time": "2026-01-28T23:42:24.722398",
+      "eval_output_dir": "outputs/NousResearch_Hermes-2-Pro-Mistral-7B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.22,
+          "score": 0.22
+        },
+        "gsm8k": {
+          "overall": 0.67,
+          "score": 0.67
+        },
+        "math_500": {
+          "overall": 0.2564,
+          "score": 0.2564
+        },
+        "mmlu": {
+          "overall": 0.474,
+          "score": 0.474
+        },
+        "mmlu_pro": {
+          "overall": 0.29,
+          "score": 0.29
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "NousResearch/Hermes-2-Pro-Mistral-7B",
+      "model_name": "NousResearch/Hermes-2-Pro-Mistral-7B",
+      "size_bytes": 7241994240,
+      "start_time": "2026-01-28T23:23:27.201458",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 623082,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO": {
+      "datasets_tested": null,
+      "duration_seconds": 2336.7,
+      "end_time": "2026-01-29T00:06:10.185588",
+      "eval_output_dir": "outputs/NousResearch_Nous-Hermes-2-Mixtral-8x7B-DPO",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.26,
+          "score": 0.26
+        },
+        "gsm8k": {
+          "overall": 0.79,
+          "score": 0.79
+        },
+        "math_500": {
+          "overall": 0.4388,
+          "score": 0.4388
+        },
+        "mmlu": {
+          "overall": 0.6735,
+          "score": 0.6735
+        },
+        "mmlu_pro": {
+          "overall": 0.4421,
+          "score": 0.4421
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO",
+      "model_name": "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO",
+      "size_bytes": 46702809088,
+      "start_time": "2026-01-28T23:27:13.487194",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 633713,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "NovaSky-AI/Sky-T1-32B-Preview": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 2726.98,
+      "end_time": "2026-01-29T14:24:39.182363",
+      "eval_output_dir": "outputs/NovaSky-AI_Sky-T1-32B-Preview",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "score": 0.5
+        },
+        "gsm8k": {
+          "score": 0.98
+        },
+        "math_500": {
+          "score": 0.8707
+        },
+        "mmlu": {
+          "score": 0.8498
+        },
+        "mmlu_pro": {
+          "score": 0.6993
+        }
+      },
+      "gpu_memory_gb": 1033.92,
+      "model_id": "NovaSky-AI/Sky-T1-32B-Preview",
+      "model_name": "NovaSky-AI/Sky-T1-32B-Preview",
+      "size_bytes": 32763876352,
+      "start_time": "2026-01-29T13:39:12.204517",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 100.05,
+        "test_execution_seconds": 2614.89,
+        "total_seconds": 2726.98
+      },
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 379028,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "Orenguteng/Llama-3-8B-Lexi-Uncensored": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 1200.28,
+      "end_time": "2026-01-29T14:17:46.567555",
+      "eval_output_dir": "outputs/Orenguteng_Llama-3-8B-Lexi-Uncensored",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "score": 0.29
+        },
+        "gsm8k": {
+          "score": 0.7
+        },
+        "math_500": {
+          "score": 0.2748
+        },
+        "mmlu": {
+          "score": 0.4861
+        },
+        "mmlu_pro": {
+          "score": 0.3279
+        }
+      },
+      "gpu_memory_gb": 898.16,
+      "model_id": "Orenguteng/Llama-3-8B-Lexi-Uncensored",
+      "model_name": "Orenguteng/Llama-3-8B-Lexi-Uncensored",
+      "size_bytes": 8030261248,
+      "start_time": "2026-01-29T13:57:46.286093",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 80.05,
+        "test_execution_seconds": 1071.69,
+        "total_seconds": 1200.28
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 416412,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "Qwen/QwQ-32B": {
+      "datasets_tested": null,
+      "duration_seconds": 6878.9,
+      "end_time": "2026-01-26T19:03:10.147314",
+      "eval_output_dir": "outputs/20260123_150841",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.13,
+          "score": 0.13
+        },
+        "gsm8k": {
+          "overall": 0.87,
+          "score": 0.87
+        },
+        "math_500": {
+          "overall": 0.4896,
+          "score": 0.4896
+        },
+        "mmlu": {
+          "overall": 0.754,
+          "score": 0.754
+        },
+        "mmlu_pro": {
+          "overall": 0.4736,
+          "score": 0.4736
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/QwQ-32B",
+      "model_name": "Qwen/QwQ-32B",
+      "size_bytes": 32763876352,
+      "start_time": "2026-01-26T17:08:31.251466",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1111965,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen2-7B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 883.91,
+      "end_time": "2026-01-27T07:27:20.865969",
+      "eval_output_dir": "outputs/Qwen_Qwen2-7B-Instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.3,
+          "score": 0.3
+        },
+        "gsm8k": {
+          "overall": 0.88,
+          "score": 0.88
+        },
+        "math_500": {
+          "overall": 0.552,
+          "score": 0.552
+        },
+        "mmlu": {
+          "overall": 0.4998,
+          "score": 0.4998
+        },
+        "mmlu_pro": {
+          "overall": 0.3836,
+          "score": 0.3836
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen2-7B-Instruct",
+      "model_name": "Qwen/Qwen2-7B-Instruct",
+      "size_bytes": 7615616512,
+      "start_time": "2026-01-27T07:12:36.960274",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3755198,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen2.5-0.5B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 512.54,
+      "end_time": "2026-01-27T08:26:30.846964",
+      "eval_output_dir": "outputs/Qwen_Qwen2.5-0.5B-Instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.2,
+          "score": 0.2
+        },
+        "gsm8k": {
+          "overall": 0.45,
+          "score": 0.45
+        },
+        "math_500": {
+          "overall": 0.3002,
+          "score": 0.3002
+        },
+        "mmlu": {
+          "overall": 0.3172,
+          "score": 0.3172
+        },
+        "mmlu_pro": {
+          "overall": 0.1357,
+          "score": 0.1357
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+      "size_bytes": 494032768,
+      "start_time": "2026-01-27T08:17:58.306638",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3911193,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen2.5-14B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 2384.66,
+      "end_time": "2026-01-27T09:36:19.359902",
+      "eval_output_dir": "outputs/Qwen_Qwen2.5-14B-Instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.44,
+          "score": 0.44
+        },
+        "gsm8k": {
+          "overall": 0.95,
+          "score": 0.95
+        },
+        "math_500": {
+          "overall": 0.8014,
+          "score": 0.8014
+        },
+        "mmlu": {
+          "overall": 0.8121,
+          "score": 0.8121
+        },
+        "mmlu_pro": {
+          "overall": 0.6407,
+          "score": 0.6407
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen2.5-14B-Instruct",
+      "model_name": "Qwen/Qwen2.5-14B-Instruct",
+      "size_bytes": 14770033664,
+      "start_time": "2026-01-27T08:56:34.698246",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 4008491,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen2.5-72B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 3568.77,
+      "end_time": "2026-01-28T20:53:23.070149",
+      "eval_output_dir": "outputs/20260125_181529",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.53,
+          "score": 0.53
+        },
+        "gsm8k": {
+          "overall": 0.96,
+          "score": 0.96
+        },
+        "math_500": {
+          "overall": 0.8499,
+          "score": 0.8499
+        },
+        "mmlu": {
+          "overall": 0.8637,
+          "score": 0.8637
+        },
+        "mmlu_pro": {
+          "overall": 0.7021,
+          "score": 0.7021
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen2.5-72B-Instruct",
+      "model_name": "Qwen/Qwen2.5-72B-Instruct",
+      "size_bytes": 72706203648,
+      "start_time": "2026-01-28T19:53:54.302982",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2579713,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen2.5-Coder-32B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 1983.89,
+      "end_time": "2026-01-28T17:23:47.198598",
+      "eval_output_dir": "outputs/20260123_171055",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.48,
+          "score": 0.48
+        },
+        "gsm8k": {
+          "overall": 0.99,
+          "score": 0.99
+        },
+        "math_500": {
+          "overall": 0.7852,
+          "score": 0.7852
+        },
+        "mmlu": {
+          "overall": 0.7959,
+          "score": 0.7959
+        },
+        "mmlu_pro": {
+          "overall": 0.625,
+          "score": 0.625
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "model_name": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "size_bytes": 32763876352,
+      "start_time": "2026-01-28T16:50:43.309306",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2230076,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-1.7B": {
+      "datasets_tested": null,
+      "duration_seconds": 2670.62,
+      "end_time": "2026-01-29T00:50:51.016039",
+      "eval_output_dir": "outputs/Qwen_Qwen3-1.7B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.16,
+          "score": 0.16
+        },
+        "gsm8k": {
+          "overall": 0.73,
+          "score": 0.73
+        },
+        "math_500": {
+          "overall": 0.2517,
+          "score": 0.2517
+        },
+        "mmlu": {
+          "overall": 0.6588,
+          "score": 0.6588
+        },
+        "mmlu_pro": {
+          "overall": 0.3957,
+          "score": 0.3957
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-1.7B",
+      "model_name": "Qwen/Qwen3-1.7B",
+      "size_bytes": 2031739904,
+      "start_time": "2026-01-29T00:06:20.393697",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 713758,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-14B": {
+      "datasets_tested": null,
+      "duration_seconds": 6685.96,
+      "end_time": "2026-01-29T02:10:45.946743",
+      "eval_output_dir": "outputs/Qwen_Qwen3-14B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.27,
+          "score": 0.27
+        },
+        "gsm8k": {
+          "overall": 0.78,
+          "score": 0.78
+        },
+        "math_500": {
+          "overall": 0.3395,
+          "score": 0.3395
+        },
+        "mmlu": {
+          "overall": 0.8072,
+          "score": 0.8072
+        },
+        "mmlu_pro": {
+          "overall": 0.58,
+          "score": 0.58
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-14B",
+      "model_name": "Qwen/Qwen3-14B",
+      "size_bytes": 14768307200,
+      "start_time": "2026-01-29T00:19:19.990197",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 742494,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-235B-A22B-Instruct-2507": {
+      "datasets_tested": null,
+      "duration_seconds": 3982.76,
+      "end_time": "2026-01-27T07:07:07.042130",
+      "eval_output_dir": "outputs/Qwen_Qwen3-235B-A22B-Instruct-2507",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.72,
+          "score": 0.72
+        },
+        "gsm8k": {
+          "overall": 0.98,
+          "score": 0.98
+        },
+        "math_500": {
+          "overall": 0.7968,
+          "score": 0.7968
+        },
+        "mmlu": {
+          "overall": 0.8991,
+          "score": 0.8991
+        },
+        "mmlu_pro": {
+          "overall": 0.7943,
+          "score": 0.7943
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "model_name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "size_bytes": 235093634560,
+      "start_time": "2026-01-27T06:00:44.277497",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3591637,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-30B-A3B": {
+      "datasets_tested": null,
+      "duration_seconds": 4332.31,
+      "end_time": "2026-01-27T02:15:35.339539",
+      "eval_output_dir": "outputs/Qwen_Qwen3-30B-A3B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.16,
+          "score": 0.16
+        },
+        "gsm8k": {
+          "overall": 0.78,
+          "score": 0.78
+        },
+        "math_500": {
+          "overall": 0.2933,
+          "score": 0.2933
+        },
+        "mmlu": {
+          "overall": 0.8116,
+          "score": 0.8116
+        },
+        "mmlu_pro": {
+          "overall": 0.5464,
+          "score": 0.5464
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-30B-A3B",
+      "model_name": "Qwen/Qwen3-30B-A3B",
+      "size_bytes": 30532122624,
+      "start_time": "2026-01-27T01:03:23.026813",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2931465,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-30B-A3B-Instruct-2507": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 1334.84,
+      "end_time": "2026-01-29T13:57:35.600221",
+      "eval_output_dir": "outputs/Qwen_Qwen3-30B-A3B-Instruct-2507",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "score": 0.59
+        },
+        "gsm8k": {
+          "score": 0.99
+        },
+        "math_500": {
+          "score": 0.8314
+        },
+        "mmlu": {
+          "score": 0.866
+        },
+        "mmlu_pro": {
+          "score": 0.72
+        }
+      },
+      "gpu_memory_gb": 1033.93,
+      "model_id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "size_bytes": 30532122624,
+      "start_time": "2026-01-29T13:35:20.762360",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 170.07,
+        "test_execution_seconds": 1154.97,
+        "total_seconds": 1334.84
+      },
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 369328,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "Qwen/Qwen3-8B": {
+      "datasets_tested": null,
+      "duration_seconds": 5653.85,
+      "end_time": "2026-01-27T05:34:12.950435",
+      "eval_output_dir": "outputs/20260122_003627",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.14,
+          "score": 0.14
+        },
+        "gsm8k": {
+          "overall": 0.62,
+          "score": 0.62
+        },
+        "math_500": {
+          "overall": 0.261,
+          "score": 0.261
+        },
+        "mmlu": {
+          "overall": 0.7351,
+          "score": 0.7351
+        },
+        "mmlu_pro": {
+          "overall": 0.4657,
+          "score": 0.4657
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-8B",
+      "model_name": "Qwen/Qwen3-8B",
+      "size_bytes": 8190735360,
+      "start_time": "2026-01-27T03:59:59.097021",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2316334,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Qwen/Qwen3-Coder-30B-A3B-Instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 1685.26,
+      "end_time": "2026-01-28T21:59:14.749552",
+      "eval_output_dir": "outputs/20260122_200818",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.57,
+          "score": 0.57
+        },
+        "gsm8k": {
+          "overall": 0.99,
+          "score": 0.99
+        },
+        "math_500": {
+          "overall": 0.8637,
+          "score": 0.8637
+        },
+        "mmlu": {
+          "overall": 0.8375,
+          "score": 0.8375
+        },
+        "mmlu_pro": {
+          "overall": 0.6893,
+          "score": 0.6893
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "model_name": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "size_bytes": 30532122624,
+      "start_time": "2026-01-28T21:31:09.492060",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2761254,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "SciPhi/Triplex": {
+      "datasets_tested": null,
+      "duration_seconds": 1207.94,
+      "end_time": "2026-01-27T09:15:08.075691",
+      "eval_output_dir": "outputs/SciPhi_Triplex",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.0,
+          "score": 0.0
+        },
+        "gsm8k": {
+          "overall": 0.0,
+          "score": 0.0
+        },
+        "math_500": {
+          "overall": 0.0,
+          "score": 0.0
+        },
+        "mmlu": {
+          "overall": 0.0046,
+          "score": 0.0046
+        },
+        "mmlu_pro": {
+          "overall": 0.0014,
+          "score": 0.0014
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "SciPhi/Triplex",
+      "model_name": "SciPhi/Triplex",
+      "size_bytes": 3821079552,
+      "start_time": "2026-01-27T08:55:00.131757",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 4004143,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "Tiiny/SmallThinker-3B-Preview": {
+      "datasets_tested": null,
+      "duration_seconds": 2395.59,
+      "end_time": "2026-01-29T00:11:23.949978",
+      "eval_output_dir": "outputs/Tiiny_SmallThinker-3B-Preview",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.14,
+          "score": 0.14
+        },
+        "gsm8k": {
+          "overall": 0.88,
+          "score": 0.88
+        },
+        "math_500": {
+          "overall": 0.6005,
+          "score": 0.6005
+        },
+        "mmlu": {
+          "overall": 0.6421,
+          "score": 0.6421
+        },
+        "mmlu_pro": {
+          "overall": 0.3921,
+          "score": 0.3921
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "Tiiny/SmallThinker-3B-Preview",
+      "model_name": "Tiiny/SmallThinker-3B-Preview",
+      "size_bytes": 3397103616,
+      "start_time": "2026-01-28T23:31:28.361690",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 643475,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "agentica-org/DeepScaleR-1.5B-Preview": {
+      "datasets_tested": null,
+      "duration_seconds": 2784.39,
+      "end_time": "2026-01-29T00:06:56.487076",
+      "eval_output_dir": "outputs/agentica-org_DeepScaleR-1.5B-Preview",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.07,
+          "score": 0.07
+        },
+        "gsm8k": {
+          "overall": 0.77,
+          "score": 0.77
+        },
+        "math_500": {
+          "overall": 0.5635,
+          "score": 0.5635
+        },
+        "mmlu": {
+          "overall": 0.3056,
+          "score": 0.3056
+        },
+        "mmlu_pro": {
+          "overall": 0.16,
+          "score": 0.16
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "agentica-org/DeepScaleR-1.5B-Preview",
+      "model_name": "agentica-org/DeepScaleR-1.5B-Preview",
+      "size_bytes": 1777088000,
+      "start_time": "2026-01-28T23:20:32.098013",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 614954,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "alpindale/WizardLM-2-8x22B": {
+      "datasets_tested": null,
+      "duration_seconds": 6099.27,
+      "end_time": "2026-01-27T15:21:56.184223",
+      "eval_output_dir": "outputs/alpindale_WizardLM-2-8x22B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.49,
+          "score": 0.49
+        },
+        "gsm8k": {
+          "overall": 0.91,
+          "score": 0.91
+        },
+        "math_500": {
+          "overall": 0.6074,
+          "score": 0.6074
+        },
+        "mmlu": {
+          "overall": 0.8132,
+          "score": 0.8132
+        },
+        "mmlu_pro": {
+          "overall": 0.6007,
+          "score": 0.6007
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "alpindale/WizardLM-2-8x22B",
+      "model_name": "alpindale/WizardLM-2-8x22B",
+      "size_bytes": 140620634112,
+      "start_time": "2026-01-27T13:40:16.913832",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 471397,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "deepseek-ai/DeepSeek-Prover-V2-671B": {
+      "datasets_tested": null,
+      "duration_seconds": 11899.69,
+      "end_time": "2026-01-27T05:58:00.171607",
+      "eval_output_dir": "outputs/deepseek-ai_DeepSeek-Prover-V2-671B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.59,
+          "score": 0.59
+        },
+        "gsm8k": {
+          "overall": 0.96,
+          "score": 0.96
+        },
+        "math_500": {
+          "overall": 0.8406,
+          "score": 0.8406
+        },
+        "mmlu": {
+          "overall": 0.8839,
+          "score": 0.8839
+        },
+        "mmlu_pro": {
+          "overall": 0.7579,
+          "score": 0.7579
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "deepseek-ai/DeepSeek-Prover-V2-671B",
+      "model_name": "deepseek-ai/DeepSeek-Prover-V2-671B",
+      "size_bytes": 684531386000,
+      "start_time": "2026-01-27T02:39:40.485158",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3146865,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "deepseek-ai/DeepSeek-R1": {
+      "datasets_tested": null,
+      "duration_seconds": 21520.39,
+      "end_time": "2026-01-28T22:32:35.257627",
+      "eval_output_dir": "outputs/deepseek-ai_DeepSeek-R1",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.21,
+          "score": 0.21
+        },
+        "gsm8k": {
+          "overall": 0.95,
+          "score": 0.95
+        },
+        "math_500": {
+          "overall": 0.672,
+          "score": 0.672
+        },
+        "mmlu": {
+          "overall": 0.8169,
+          "score": 0.8169
+        },
+        "mmlu_pro": {
+          "overall": 0.5929,
+          "score": 0.5929
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "deepseek-ai/DeepSeek-R1",
+      "model_name": "deepseek-ai/DeepSeek-R1",
+      "size_bytes": 684531386000,
+      "start_time": "2026-01-28T16:33:54.870377",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 4052310,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "deepseek-ai/DeepSeek-R1-0528": {
+      "datasets_tested": null,
+      "duration_seconds": 25528.71,
+      "end_time": "2026-01-27T00:59:33.889337",
+      "eval_output_dir": "outputs/deepseek-ai_DeepSeek-R1-0528",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.15,
+          "score": 0.15
+        },
+        "gsm8k": {
+          "overall": 0.76,
+          "score": 0.76
+        },
+        "math_500": {
+          "overall": 0.3695,
+          "score": 0.3695
+        },
+        "mmlu": {
+          "overall": 0.7709,
+          "score": 0.7709
+        },
+        "mmlu_pro": {
+          "overall": 0.4714,
+          "score": 0.4714
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "deepseek-ai/DeepSeek-R1-0528",
+      "model_name": "deepseek-ai/DeepSeek-R1-0528",
+      "size_bytes": 684531386000,
+      "start_time": "2026-01-26T17:54:05.180259",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1998570,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B": {
+      "datasets_tested": null,
+      "duration_seconds": 5886.61,
+      "end_time": "2026-01-27T02:39:38.119301",
+      "eval_output_dir": "outputs/deepseek-ai_DeepSeek-R1-Distill-Llama-8B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.08,
+          "score": 0.08
+        },
+        "gsm8k": {
+          "overall": 0.77,
+          "score": 0.77
+        },
+        "math_500": {
+          "overall": 0.5912,
+          "score": 0.5912
+        },
+        "mmlu": {
+          "overall": 0.6169,
+          "score": 0.6169
+        },
+        "mmlu_pro": {
+          "overall": 0.3579,
+          "score": 0.3579
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+      "model_name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+      "size_bytes": 8030261248,
+      "start_time": "2026-01-27T01:01:31.512602",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2926682,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B": {
+      "datasets_tested": null,
+      "duration_seconds": 2426.16,
+      "end_time": "2026-01-26T17:54:05.175087",
+      "eval_output_dir": "outputs/deepseek-ai_DeepSeek-R1-Distill-Qwen-1.5B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.07,
+          "score": 0.07
+        },
+        "gsm8k": {
+          "overall": 0.75,
+          "score": 0.75
+        },
+        "math_500": {
+          "overall": 0.5404,
+          "score": 0.5404
+        },
+        "mmlu": {
+          "overall": 0.3733,
+          "score": 0.3733
+        },
+        "mmlu_pro": {
+          "overall": 0.2193,
+          "score": 0.2193
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "size_bytes": 1777088000,
+      "start_time": "2026-01-26T17:13:39.011614",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1894520,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "dphn/Dolphin-Mistral-24B-Venice-Edition": {
+      "datasets_tested": null,
+      "duration_seconds": 1833.7,
+      "end_time": "2026-01-29T00:40:41.249396",
+      "eval_output_dir": "outputs/dphn_Dolphin-Mistral-24B-Venice-Edition",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.52,
+          "score": 0.52
+        },
+        "gsm8k": {
+          "overall": 0.95,
+          "score": 0.95
+        },
+        "math_500": {
+          "overall": 0.746,
+          "score": 0.746
+        },
+        "mmlu": {
+          "overall": 0.8297,
+          "score": 0.8297
+        },
+        "mmlu_pro": {
+          "overall": 0.66,
+          "score": 0.66
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "dphn/Dolphin-Mistral-24B-Venice-Edition",
+      "model_name": "dphn/Dolphin-Mistral-24B-Venice-Edition",
+      "size_bytes": 23572403200,
+      "start_time": "2026-01-29T00:10:07.551283",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 2,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 723837,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "dphn/dolphin-2.9-llama3-8b": {
+      "datasets_tested": null,
+      "duration_seconds": 885.09,
+      "end_time": "2026-01-28T23:40:05.488741",
+      "eval_output_dir": "outputs/dphn_dolphin-2.9-llama3-8b",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.23,
+          "score": 0.23
+        },
+        "gsm8k": {
+          "overall": 0.8,
+          "score": 0.8
+        },
+        "math_500": {
+          "overall": 0.3164,
+          "score": 0.3164
+        },
+        "mmlu": {
+          "overall": 0.4559,
+          "score": 0.4559
+        },
+        "mmlu_pro": {
+          "overall": 0.2914,
+          "score": 0.2914
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "dphn/dolphin-2.9-llama3-8b",
+      "model_name": "dphn/dolphin-2.9-llama3-8b",
+      "size_bytes": 8030277632,
+      "start_time": "2026-01-28T23:25:20.403574",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 627999,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "google/gemma-1.1-7b-it": {
+      "datasets_tested": null,
+      "duration_seconds": 711.74,
+      "end_time": "2026-01-27T12:08:04.527888",
+      "eval_output_dir": "outputs/google_gemma-1.1-7b-it",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.32,
+          "score": 0.32
+        },
+        "gsm8k": {
+          "overall": 0.18,
+          "score": 0.18
+        },
+        "math_500": {
+          "overall": 0.2125,
+          "score": 0.2125
+        },
+        "mmlu": {
+          "overall": 0.533,
+          "score": 0.533
+        },
+        "mmlu_pro": {
+          "overall": 0.285,
+          "score": 0.285
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "google/gemma-1.1-7b-it",
+      "model_name": "google/gemma-1.1-7b-it",
+      "size_bytes": 8537680896,
+      "start_time": "2026-01-27T11:56:12.783851",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 237917,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "google/gemma-3-270m-it": {
+      "datasets_tested": null,
+      "duration_seconds": 273.98,
+      "end_time": "2026-01-27T08:19:15.457604",
+      "eval_output_dir": "outputs/google_gemma-3-270m-it",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.09,
+          "score": 0.09
+        },
+        "gsm8k": {
+          "overall": 0.17,
+          "score": 0.17
+        },
+        "math_500": {
+          "overall": 0.0901,
+          "score": 0.0901
+        },
+        "mmlu": {
+          "overall": 0.0412,
+          "score": 0.0412
+        },
+        "mmlu_pro": {
+          "overall": 0.0586,
+          "score": 0.0586
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "google/gemma-3-270m-it",
+      "model_name": "google/gemma-3-270m-it",
+      "size_bytes": 268098176,
+      "start_time": "2026-01-27T08:14:41.479223",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3900372,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "gorilla-llm/gorilla-openfunctions-v2": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 439.31,
+      "end_time": "2026-01-29T14:07:43.560442",
+      "eval_output_dir": "outputs/gorilla-llm_gorilla-openfunctions-v2",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.2,
+          "score": 0.2
+        },
+        "gsm8k": {
+          "overall": 0.29,
+          "score": 0.29
+        },
+        "math_500": {
+          "overall": 0.1986,
+          "score": 0.1986
+        },
+        "mmlu": {
+          "overall": 0.2058,
+          "score": 0.2058
+        },
+        "mmlu_pro": {
+          "overall": 0.1779,
+          "score": 0.1779
+        }
+      },
+      "gpu_memory_gb": 584.97,
+      "model_id": "gorilla-llm/gorilla-openfunctions-v2",
+      "model_name": "gorilla-llm/gorilla-openfunctions-v2",
+      "size_bytes": 27641655714,
+      "start_time": "2026-01-29T14:00:24.253331",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 65.04,
+        "test_execution_seconds": 366.09,
+        "total_seconds": 439.31
+      },
+      "tp_size": 2,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2312643,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "ibm-granite/granite-4.0-h-small": {
+      "datasets_tested": null,
+      "duration_seconds": 2468.34,
+      "end_time": "2026-01-27T13:26:07.637857",
+      "eval_output_dir": "outputs/ibm-granite_granite-4.0-h-small",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.39,
+          "score": 0.39
+        },
+        "gsm8k": {
+          "overall": 0.96,
+          "score": 0.96
+        },
+        "math_500": {
+          "overall": 0.8106,
+          "score": 0.8106
+        },
+        "mmlu": {
+          "overall": 0.8058,
+          "score": 0.8058
+        },
+        "mmlu_pro": {
+          "overall": 0.6443,
+          "score": 0.6443
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "ibm-granite/granite-4.0-h-small",
+      "model_name": "ibm-granite/granite-4.0-h-small",
+      "size_bytes": 32207337984,
+      "start_time": "2026-01-27T12:44:59.295569",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 346607,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "ibm-granite/granite-4.0-micro": {
+      "datasets_tested": null,
+      "duration_seconds": 696.92,
+      "end_time": "2026-01-29T01:25:57.275253",
+      "eval_output_dir": "outputs/ibm-granite_granite-4.0-micro",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.28,
+          "score": 0.28
+        },
+        "gsm8k": {
+          "overall": 0.83,
+          "score": 0.83
+        },
+        "math_500": {
+          "overall": 0.6351,
+          "score": 0.6351
+        },
+        "mmlu": {
+          "overall": 0.6528,
+          "score": 0.6528
+        },
+        "mmlu_pro": {
+          "overall": 0.4471,
+          "score": 0.4471
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "ibm-granite/granite-4.0-micro",
+      "model_name": "ibm-granite/granite-4.0-micro",
+      "size_bytes": 3402836480,
+      "start_time": "2026-01-29T01:14:20.354642",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 852285,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "janhq/Jan-v1-4B": {
+      "datasets_tested": null,
+      "duration_seconds": 4813.34,
+      "end_time": "2026-01-29T01:28:19.150964",
+      "eval_output_dir": "outputs/janhq_Jan-v1-4B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.12,
+          "score": 0.12
+        },
+        "gsm8k": {
+          "overall": 0.93,
+          "score": 0.93
+        },
+        "math_500": {
+          "overall": 0.5012,
+          "score": 0.5012
+        },
+        "mmlu": {
+          "overall": 0.7205,
+          "score": 0.7205
+        },
+        "mmlu_pro": {
+          "overall": 0.4121,
+          "score": 0.4121
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "janhq/Jan-v1-4B",
+      "model_name": "janhq/Jan-v1-4B",
+      "size_bytes": 4022468096,
+      "start_time": "2026-01-29T00:08:05.815522",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 719084,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "jinaai/ReaderLM-v2": {
+      "datasets_tested": null,
+      "duration_seconds": 649.77,
+      "end_time": "2026-01-27T07:18:01.418160",
+      "eval_output_dir": "outputs/jinaai_ReaderLM-v2",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.22,
+          "score": 0.22
+        },
+        "gsm8k": {
+          "overall": 0.29,
+          "score": 0.29
+        },
+        "math_500": {
+          "overall": 0.1455,
+          "score": 0.1455
+        },
+        "mmlu": {
+          "overall": 0.3012,
+          "score": 0.3012
+        },
+        "mmlu_pro": {
+          "overall": 0.1321,
+          "score": 0.1321
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "jinaai/ReaderLM-v2",
+      "model_name": "jinaai/ReaderLM-v2",
+      "size_bytes": 1543714304,
+      "start_time": "2026-01-27T07:07:11.649443",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3739941,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "microsoft/Phi-3-medium-128k-instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 1969.92,
+      "end_time": "2026-01-29T00:14:58.250913",
+      "eval_output_dir": "outputs/microsoft_Phi-3-medium-128k-instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.31,
+          "score": 0.31
+        },
+        "gsm8k": {
+          "overall": 0.91,
+          "score": 0.91
+        },
+        "math_500": {
+          "overall": 0.5243,
+          "score": 0.5243
+        },
+        "mmlu": {
+          "overall": 0.7609,
+          "score": 0.7609
+        },
+        "mmlu_pro": {
+          "overall": 0.5643,
+          "score": 0.5643
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "microsoft/Phi-3-medium-128k-instruct",
+      "model_name": "microsoft/Phi-3-medium-128k-instruct",
+      "size_bytes": 13960238080,
+      "start_time": "2026-01-28T23:42:08.334371",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 665829,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "microsoft/Phi-3-mini-128k-instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 1182.03,
+      "end_time": "2026-01-26T17:31:50.275318",
+      "eval_output_dir": "outputs/microsoft_Phi-3-mini-128k-instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.3,
+          "score": 0.3
+        },
+        "gsm8k": {
+          "overall": 0.72,
+          "score": 0.72
+        },
+        "math_500": {
+          "overall": 0.4734,
+          "score": 0.4734
+        },
+        "mmlu": {
+          "overall": 0.6919,
+          "score": 0.6919
+        },
+        "mmlu_pro": {
+          "overall": 0.48,
+          "score": 0.48
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "microsoft/Phi-3-mini-128k-instruct",
+      "model_name": "microsoft/Phi-3-mini-128k-instruct",
+      "size_bytes": 3821079552,
+      "start_time": "2026-01-26T17:12:08.246271",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1889562,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "microsoft/Phi-3-mini-4k-instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 954.03,
+      "end_time": "2026-01-28T19:15:09.705271",
+      "eval_output_dir": "outputs/20260120_201435",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.37,
+          "score": 0.37
+        },
+        "gsm8k": {
+          "overall": 0.79,
+          "score": 0.79
+        },
+        "math_500": {
+          "overall": 0.4781,
+          "score": 0.4781
+        },
+        "mmlu": {
+          "overall": 0.6937,
+          "score": 0.6937
+        },
+        "mmlu_pro": {
+          "overall": 0.4743,
+          "score": 0.4743
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "microsoft/Phi-3-mini-4k-instruct",
+      "model_name": "microsoft/Phi-3-mini-4k-instruct",
+      "size_bytes": 3821079552,
+      "start_time": "2026-01-28T18:59:15.678911",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2472391,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "microsoft/Phi-4-mini-instruct": {
+      "datasets_tested": null,
+      "duration_seconds": 862.32,
+      "end_time": "2026-01-28T22:50:26.128077",
+      "eval_output_dir": "outputs/microsoft_Phi-4-mini-instruct",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.38,
+          "score": 0.38
+        },
+        "gsm8k": {
+          "overall": 0.91,
+          "score": 0.91
+        },
+        "math_500": {
+          "overall": 0.7067,
+          "score": 0.7067
+        },
+        "mmlu": {
+          "overall": 0.7295,
+          "score": 0.7295
+        },
+        "mmlu_pro": {
+          "overall": 0.5336,
+          "score": 0.5336
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "microsoft/Phi-4-mini-instruct",
+      "model_name": "microsoft/Phi-4-mini-instruct",
+      "size_bytes": 3836021760,
+      "start_time": "2026-01-28T22:36:03.806688",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 529696,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "mistralai/Mistral-7B-Instruct-v0.1": {
+      "datasets_tested": null,
+      "duration_seconds": 1083.41,
+      "end_time": "2026-01-26T17:28:33.683131",
+      "eval_output_dir": "outputs/mistralai_Mistral-7B-Instruct-v0.1",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.22,
+          "score": 0.22
+        },
+        "gsm8k": {
+          "overall": 0.34,
+          "score": 0.34
+        },
+        "math_500": {
+          "overall": 0.0854,
+          "score": 0.0854
+        },
+        "mmlu": {
+          "overall": 0.3419,
+          "score": 0.3419
+        },
+        "mmlu_pro": {
+          "overall": 0.1871,
+          "score": 0.1871
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "mistralai/Mistral-7B-Instruct-v0.1",
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.1",
+      "size_bytes": 7241732096,
+      "start_time": "2026-01-26T17:10:30.273585",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1885212,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "numind/NuExtract-1.5": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 1305.2,
+      "end_time": "2026-01-29T14:23:41.266400",
+      "eval_output_dir": "outputs/numind_NuExtract-1.5",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "score": 0.35
+        },
+        "gsm8k": {
+          "score": 0.86
+        },
+        "math_500": {
+          "score": 0.4711
+        },
+        "mmlu": {
+          "score": 0.6731
+        },
+        "mmlu_pro": {
+          "score": 0.4479
+        }
+      },
+      "gpu_memory_gb": 770.63,
+      "model_id": "numind/NuExtract-1.5",
+      "model_name": "numind/NuExtract-1.5",
+      "size_bytes": 3821079552,
+      "start_time": "2026-01-29T14:01:56.063499",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 50.04,
+        "test_execution_seconds": 1246.68,
+        "total_seconds": 1305.2
+      },
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 426110,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "nvidia/Llama-3_3-Nemotron-Super-49B-v1": {
+      "datasets_tested": null,
+      "duration_seconds": 3148.31,
+      "end_time": "2026-01-27T10:59:31.981546",
+      "eval_output_dir": "outputs/nvidia_Llama-3_3-Nemotron-Super-49B-v1",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.53,
+          "score": 0.53
+        },
+        "gsm8k": {
+          "overall": 0.99,
+          "score": 0.99
+        },
+        "math_500": {
+          "overall": 0.7875,
+          "score": 0.7875
+        },
+        "mmlu": {
+          "overall": 0.8439,
+          "score": 0.8439
+        },
+        "mmlu_pro": {
+          "overall": 0.6771,
+          "score": 0.6771
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+      "model_name": "nvidia/Llama-3_3-Nemotron-Super-49B-v1",
+      "size_bytes": 49867145216,
+      "start_time": "2026-01-27T10:07:03.673999",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 4169081,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "nvidia/Llama3-ChatQA-1.5-70B": {
+      "datasets_tested": null,
+      "duration_seconds": 968.03,
+      "end_time": "2026-01-29T00:56:49.278956",
+      "eval_output_dir": "outputs/nvidia_Llama3-ChatQA-1.5-70B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.23,
+          "score": 0.23
+        },
+        "gsm8k": {
+          "overall": 0.6,
+          "score": 0.6
+        },
+        "math_500": {
+          "overall": 0.3487,
+          "score": 0.3487
+        },
+        "mmlu": {
+          "overall": 0.3152,
+          "score": 0.3152
+        },
+        "mmlu_pro": {
+          "overall": 0.2057,
+          "score": 0.2057
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "nvidia/Llama3-ChatQA-1.5-70B",
+      "model_name": "nvidia/Llama3-ChatQA-1.5-70B",
+      "size_bytes": 70553711616,
+      "start_time": "2026-01-29T00:40:41.253191",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 785054,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "nvidia/Llama3-ChatQA-1.5-8B": {
+      "datasets_tested": null,
+      "duration_seconds": 550.25,
+      "end_time": "2026-01-28T23:31:28.328607",
+      "eval_output_dir": "outputs/nvidia_Llama3-ChatQA-1.5-8B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.24,
+          "score": 0.24
+        },
+        "gsm8k": {
+          "overall": 0.51,
+          "score": 0.51
+        },
+        "math_500": {
+          "overall": 0.157,
+          "score": 0.157
+        },
+        "mmlu": {
+          "overall": 0.1937,
+          "score": 0.1937
+        },
+        "mmlu_pro": {
+          "overall": 0.2071,
+          "score": 0.2071
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "nvidia/Llama3-ChatQA-1.5-8B",
+      "model_name": "nvidia/Llama3-ChatQA-1.5-8B",
+      "size_bytes": 8030263296,
+      "start_time": "2026-01-28T23:22:18.079073",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 619810,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "openbmb/MiniCPM-2B-sft-fp32": {
+      "datasets_tested": [
+        "mmlu",
+        "mmlu_pro",
+        "math_500",
+        "gsm8k",
+        "gpqa_diamond"
+      ],
+      "duration_seconds": 328.85,
+      "end_time": "2026-01-29T13:51:04.613191",
+      "eval_output_dir": "outputs/openbmb_MiniCPM-2B-sft-fp32",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.26,
+          "score": 0.26
+        },
+        "gsm8k": {
+          "overall": 0.54,
+          "score": 0.54
+        },
+        "math_500": {
+          "overall": 0.1986,
+          "score": 0.1986
+        },
+        "mmlu": {
+          "overall": 0.443,
+          "score": 0.443
+        },
+        "mmlu_pro": {
+          "overall": 0.1586,
+          "score": 0.1586
+        }
+      },
+      "gpu_memory_gb": 766.66,
+      "model_id": "openbmb/MiniCPM-2B-sft-fp32",
+      "model_name": "openbmb/MiniCPM-2B-sft-fp32",
+      "size_bytes": 21801203700,
+      "start_time": "2026-01-29T13:45:35.760912",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": {
+        "samples_per_second": null,
+        "total_samples": null
+      },
+      "timing": {
+        "server_start_seconds": 70.04,
+        "test_execution_seconds": 250.74,
+        "total_seconds": 328.85
+      },
+      "tp_size": 2,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2271330,
+      "vllm_stderr": null,
+      "vllm_version": "0.14.1"
+    },
+    "openbmb/MiniCPM4.1-8B": {
+      "datasets_tested": null,
+      "duration_seconds": 5590.92,
+      "end_time": "2026-01-29T01:15:45.678989",
+      "eval_output_dir": "outputs/openbmb_MiniCPM4.1-8B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.11,
+          "score": 0.11
+        },
+        "gsm8k": {
+          "overall": 0.78,
+          "score": 0.78
+        },
+        "math_500": {
+          "overall": 0.3372,
+          "score": 0.3372
+        },
+        "mmlu": {
+          "overall": 0.6963,
+          "score": 0.6963
+        },
+        "mmlu_pro": {
+          "overall": 0.3607,
+          "score": 0.3607
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "openbmb/MiniCPM4.1-8B",
+      "model_name": "openbmb/MiniCPM4.1-8B",
+      "size_bytes": 8185253888,
+      "start_time": "2026-01-28T23:42:34.757112",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 666585,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "osmosis-ai/Osmosis-Structure-0.6B": {
+      "datasets_tested": null,
+      "duration_seconds": 170.62,
+      "end_time": "2026-01-27T08:23:18.581565",
+      "eval_output_dir": "outputs/osmosis-ai_Osmosis-Structure-0.6B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.16,
+          "score": 0.16
+        },
+        "gsm8k": {
+          "overall": 0.0,
+          "score": 0.0
+        },
+        "math_500": {
+          "overall": 0.0185,
+          "score": 0.0185
+        },
+        "mmlu": {
+          "overall": 0.2407,
+          "score": 0.2407
+        },
+        "mmlu_pro": {
+          "overall": 0.1121,
+          "score": 0.1121
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "osmosis-ai/Osmosis-Structure-0.6B",
+      "model_name": "osmosis-ai/Osmosis-Structure-0.6B",
+      "size_bytes": 596049920,
+      "start_time": "2026-01-27T08:20:27.960907",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3918506,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "qihoo360/TinyR1-32B-Preview": {
+      "datasets_tested": null,
+      "duration_seconds": 7215.58,
+      "end_time": "2026-01-27T10:50:30.274772",
+      "eval_output_dir": "outputs/20260124_061801",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.13,
+          "score": 0.13
+        },
+        "gsm8k": {
+          "overall": 0.94,
+          "score": 0.94
+        },
+        "math_500": {
+          "overall": 0.6282,
+          "score": 0.6282
+        },
+        "mmlu": {
+          "overall": 0.7375,
+          "score": 0.7375
+        },
+        "mmlu_pro": {
+          "overall": 0.4371,
+          "score": 0.4371
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "qihoo360/TinyR1-32B-Preview",
+      "model_name": "qihoo360/TinyR1-32B-Preview",
+      "size_bytes": 32763876352,
+      "start_time": "2026-01-27T08:50:14.695612",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 4,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 2870163,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "sarvamai/sarvam-m": {
+      "datasets_tested": null,
+      "duration_seconds": 5847.37,
+      "end_time": "2026-01-27T10:32:08.626628",
+      "eval_output_dir": "outputs/sarvamai_sarvam-m",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.22,
+          "score": 0.22
+        },
+        "gsm8k": {
+          "overall": 0.92,
+          "score": 0.92
+        },
+        "math_500": {
+          "overall": 0.6836,
+          "score": 0.6836
+        },
+        "mmlu": {
+          "overall": 0.8028,
+          "score": 0.8028
+        },
+        "mmlu_pro": {
+          "overall": 0.5614,
+          "score": 0.5614
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "sarvamai/sarvam-m",
+      "model_name": "sarvamai/sarvam-m",
+      "size_bytes": 23572403200,
+      "start_time": "2026-01-27T08:54:41.254289",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 2,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 4003309,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "shenzhi-wang/Llama3-8B-Chinese-Chat": {
+      "datasets_tested": null,
+      "duration_seconds": 875.98,
+      "end_time": "2026-01-27T07:25:35.119598",
+      "eval_output_dir": "outputs/shenzhi-wang_Llama3-8B-Chinese-Chat",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.22,
+          "score": 0.22
+        },
+        "gsm8k": {
+          "overall": 0.73,
+          "score": 0.73
+        },
+        "math_500": {
+          "overall": 0.3049,
+          "score": 0.3049
+        },
+        "mmlu": {
+          "overall": 0.5637,
+          "score": 0.5637
+        },
+        "mmlu_pro": {
+          "overall": 0.3414,
+          "score": 0.3414
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "shenzhi-wang/Llama3-8B-Chinese-Chat",
+      "model_name": "shenzhi-wang/Llama3-8B-Chinese-Chat",
+      "size_bytes": 8030261248,
+      "start_time": "2026-01-27T07:10:59.143419",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 3750045,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "stabilityai/stablelm-zephyr-3b": {
+      "datasets_tested": null,
+      "duration_seconds": 1670.35,
+      "end_time": "2026-01-27T21:22:42.280519",
+      "eval_output_dir": "outputs/stabilityai_stablelm-zephyr-3b",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.15,
+          "score": 0.15
+        },
+        "gsm8k": {
+          "overall": 0.42,
+          "score": 0.42
+        },
+        "math_500": {
+          "overall": 0.134,
+          "score": 0.134
+        },
+        "mmlu": {
+          "overall": 0.2444,
+          "score": 0.2444
+        },
+        "mmlu_pro": {
+          "overall": 0.1543,
+          "score": 0.1543
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "stabilityai/stablelm-zephyr-3b",
+      "model_name": "stabilityai/stablelm-zephyr-3b",
+      "size_bytes": 2795443200,
+      "start_time": "2026-01-27T20:54:51.934830",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 1441198,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "tencent/Hunyuan-MT-7B": {
+      "datasets_tested": null,
+      "duration_seconds": 1480.2,
+      "end_time": "2026-01-28T22:57:18.517670",
+      "eval_output_dir": "outputs/tencent_Hunyuan-MT-7B",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.17,
+          "score": 0.17
+        },
+        "gsm8k": {
+          "overall": 0.55,
+          "score": 0.55
+        },
+        "math_500": {
+          "overall": 0.1917,
+          "score": 0.1917
+        },
+        "mmlu": {
+          "overall": 0.3489,
+          "score": 0.3489
+        },
+        "mmlu_pro": {
+          "overall": 0.18,
+          "score": 0.18
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "tencent/Hunyuan-MT-7B",
+      "model_name": "tencent/Hunyuan-MT-7B",
+      "size_bytes": 8030269440,
+      "start_time": "2026-01-28T22:32:38.313403",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 1,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 521318,
+      "vllm_stderr": null,
+      "vllm_version": null
+    },
+    "tngtech/DeepSeek-R1T-Chimera": {
+      "datasets_tested": null,
+      "duration_seconds": 17234.47,
+      "end_time": "2026-01-27T20:54:41.894828",
+      "eval_output_dir": "outputs/tngtech_DeepSeek-R1T-Chimera",
+      "eval_scores": {
+        "gpqa_diamond": {
+          "overall": 0.48,
+          "score": 0.48
+        },
+        "gsm8k": {
+          "overall": 0.97,
+          "score": 0.97
+        },
+        "math_500": {
+          "overall": 0.8152,
+          "score": 0.8152
+        },
+        "mmlu": {
+          "overall": 0.9042,
+          "score": 0.9042
+        },
+        "mmlu_pro": {
+          "overall": 0.7636,
+          "score": 0.7636
+        }
+      },
+      "gpu_memory_gb": null,
+      "model_id": "tngtech/DeepSeek-R1T-Chimera",
+      "model_name": "tngtech/DeepSeek-R1T-Chimera",
+      "size_bytes": 684531386000,
+      "start_time": "2026-01-27T16:07:27.423677",
+      "status": "success",
+      "test_error": null,
+      "test_stderr": "",
+      "test_stdout": "TEST_COMPLETED_SUCCESSFULLY",
+      "throughput": null,
+      "timing": null,
+      "tp_size": 8,
+      "traceback": null,
+      "vllm_error": null,
+      "vllm_pid": 806462,
+      "vllm_stderr": null,
+      "vllm_version": null
+    }
+  },
+  "skipped": 0,
+  "started_at": "2026-01-26T16:51:33.294826",
+  "success": 68,
+  "total_models": 68,
+  "vllm_version": "0.14.1"
+}

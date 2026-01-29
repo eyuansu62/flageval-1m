@@ -1024,13 +1024,19 @@
             renderFailures();
           }
 
-          // Load results - try multiple paths for different GitHub Pages setups
+          // Load results - prefer success-with-scores file, then fall back
           const possiblePaths = [
-            'results.json',                          // Same directory (best for GitHub Pages)
-            './results.json',                        // Same directory (alternative)
-            '../experiment_results/results.json',    // If served from results_viewer/
-            'experiment_results/results.json',       // If served from root
-            './experiment_results/results.json',     // Alternative root path
+            'results_success_with_scores.json',              // Same directory (preferred)
+            './results_success_with_scores.json',            // Same directory (alt)
+            '../experiment_results/results_success_with_scores.json',
+            'experiment_results/results_success_with_scores.json',
+            './experiment_results/results_success_with_scores.json',
+            // Fallbacks to generic results.json
+            'results.json',
+            './results.json',
+            '../experiment_results/results.json',
+            'experiment_results/results.json',
+            './experiment_results/results.json',
           ];
           
           let resultsRes = null;
